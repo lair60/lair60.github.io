@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgatsby_luisingarivera=self.webpackChunkgatsby_luisingarivera||[]).push([[484],{6484:function(e,r,n){n.r(r),n.d(r,{default:function(){return l}});var t=n(7294),a="footer-module--footerBody--bTfnC";function l(){return t.createElement("footer",{className:a},t.createElement("span",null,"@luisingarivera.online, ",(new Date).getFullYear(),". All rights reserved."))}}}]);
+//# sourceMappingURL=484-cd53457f683e03da43e7.js.map
