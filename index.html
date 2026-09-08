@@ -305,7 +305,7 @@
             button will work as-is. A ready-to-use copy of your current CV
             with that filename is included alongside this file.
           -->
-          <a class="btn btn-ghost" href="Luis_Inga_Rivera_CV.pdf" target="_blank" download data-i18n="ctaCV">Download CV ↓</a>
+          <a id="cvLink" class="btn btn-ghost" href="Luis_Inga_Rivera_CV.pdf" target="_blank" download data-i18n="ctaCV">Download CV ↓</a>
           <a class="btn btn-ghost" href="#log" data-i18n="ctaLog">15 years of experience ↓</a>
         </div>
       </div>
@@ -692,6 +692,13 @@
 
   function applyLang(lang){
     const dict = i18n[lang] || i18n.en;
+    const cvLink = document.getElementById("cvLink");
+
+    if (lang === "es") {
+      cvLink.href = "Luis_Inga_Rivera_CV_ES.pdf";
+    } else {
+      cvLink.href = "Luis_Inga_Rivera_CV.pdf";
+    }
     document.querySelectorAll('[data-i18n]').forEach(el=>{
       const key = el.getAttribute('data-i18n');
       if(dict[key] !== undefined){
