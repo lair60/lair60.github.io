@@ -268,7 +268,7 @@
   <div class="nav-inner">
     <div class="nav-id"><span class="dot-live" aria-hidden="true"></span> lair60 — <span data-i18n="navAvail">available for new roles</span></div>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#now" data-i18n="navNow">now</a>
+      <!--<a href="#now" data-i18n="navNow">now</a>-->
       <a href="#log" data-i18n="navLog">log</a>
       <a href="#stack" data-i18n="navStack">stack</a>
       <a href="#contact" data-i18n="navContact">contact</a>
@@ -359,11 +359,11 @@
   </section>
 
   <!-- NOW -->
-  <section id="now" class="wrap">
+  <!--<section id="now" class="wrap">
     <div class="sec-head">
       <span class="sec-num">01</span>
       <h2 class="sec-title" data-i18n="secNow">Now</h2>
-      <span class="sec-sub" data-i18n="secNowSub">03/2025 — present</span>
+      <span class="sec-sub" data-i18n="secNowSub">03/2025 — 08/2026</span>
     </div>
 
     <div class="now-card reveal">
@@ -410,17 +410,54 @@
         <span class="pill">GA4</span><span class="pill">Expo IAP</span>
       </div>
     </div>
-  </section>
+  </section>-->
 
   <!-- LOG -->
   <section id="log" class="wrap">
     <div class="sec-head">
-      <span class="sec-num">02</span>
+      <span class="sec-num">01</span>
       <h2 class="sec-title" data-i18n="secLog">Log</h2>
-      <span class="sec-sub">2007 — 2024</span>
+      <span class="sec-sub">2007 — 2026</span>
     </div>
 
     <div class="reveal">
+	  <div class="log-entry">
+        <div class="log-date">03/2025 — 08/2026</div>
+        <div>
+			<div class="log-company">Test-me.app</div>
+			<div class="log-role" data-i18n="capitaRole">Full Stack Developer — AI Learning Assistant</div>
+			<p style="color:var(--text-dim); font-size:14.5px; max-width:70ch;" data-i18n="nowDesc">
+        Designed and built the product's backend and cross-platform client from scratch: an async pipeline that turns uploaded documents into quizzes and real-time tutoring, streamed live to iOS, Android and web from a single codebase.
+      </p>
+
+      <div class="now-feats">
+        <div class="feat">
+          <h4 data-i18n="feat1h">Async backend</h4>
+          <p data-i18n="feat1p">FastAPI + Celery, with Redis as broker and backend, processing long-running text extraction and AI calls off the request path — retries, timeouts, exponential backoff.</p>
+        </div>
+        <div class="feat">
+          <h4 data-i18n="feat2h">Real-time streaming</h4>
+          <p data-i18n="feat2p">Native WebSockets stream AI response chunks live, with Redis Pub/Sub message recovery and automatic reconnection — consistent behaviour across iOS, Android and web.</p>
+        </div>
+        <div class="feat">
+          <h4 data-i18n="feat3h">Multi-AI orchestration</h4>
+          <p data-i18n="feat3p">Unified backend routing across Gemini, OpenAI and DeepSeek for document understanding, quiz generation and real-time math tutoring, with throttling for cost-efficient token use.</p>
+        </div>
+        <div class="feat">
+          <h4 data-i18n="feat4h">Cross-platform + payments</h4>
+          <p data-i18n="feat4p">Single Expo codebase for web, iOS and Android, with authentication and a full payment system across Stripe (web) and native IAP (mobile).</p>
+        </div>
+      </div>
+
+      <div class="pills">
+        <span class="pill">FastAPI</span><span class="pill">Celery</span><span class="pill">Redis</span>
+        <span class="pill">WebSockets</span><span class="pill">Gemini</span><span class="pill">OpenAI</span>
+        <span class="pill">DeepSeek</span><span class="pill">OCI (LB, Object Storage)</span><span class="pill">MongoDB</span>
+        <span class="pill">React Native (Expo)</span><span class="pill">Supabase</span><span class="pill">Stripe</span>
+        <span class="pill">GA4</span><span class="pill">Expo IAP</span>
+      </div>
+		</div>
+      </div>
       <div class="log-entry">
         <div class="log-date">04/2016 — 08/2024</div>
         <div>
@@ -561,7 +598,7 @@
       <a href="mailto:lair60@yahoo.es">lair60@yahoo.es</a>
       <a href="tel:+447821232546">🇬🇧 +44 7821 232546</a>
       <a href="tel:+34637229134">🇪🇸 +34 637 229 134</a>
-      <a id="website-link" href="https://www.test-me.app" target="_blank" rel="noopener">test-me.app ↗</a>
+      <!--<a id="website-link" href="https://www.test-me.app" target="_blank" rel="noopener">test-me.app ↗</a>-->
     </div>
   </div>
   <div class="copyright">
