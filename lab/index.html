@@ -201,7 +201,7 @@
         <div class="ptitle" data-i18n="params">Retrieval parameters</div>
         <div class="prow"><span data-i18n="topk">Top-k</span><input type="range" id="topk" min="1" max="8" value="4"><output id="topkO">4</output></div>
         <div class="prow" id="chunkRow"><span data-i18n="chunk">Chunk size</span><input type="range" id="chunkSz" min="200" max="800" step="100" value="400"><output id="chunkO">400</output></div>
-        <div class="prow"><span data-i18n="model">Model</span><select id="model"><option value="fast">fast · Qwen 1.5B</option><option value="quality">quality · Qwen 3B</option></select><span></span></div>
+        <div class="prow"><span data-i18n="model">Model</span><select id="model"><option value="fast">fast</option><option value="quality">quality (slower)</option></select><span></span></div>
         <div class="tog">
           <label><input type="checkbox" id="hybrid" checked><span data-i18n="hybrid">Hybrid (BM25 + vector)</span></label>
           <label><input type="checkbox" id="rerank"><span data-i18n="rerank">Rerank</span></label>
@@ -236,6 +236,7 @@ const CFG = {
   MOCK: false,
   API_BASE: 'https://lair60-api.duckdns.org',   // Caddy + DuckDNS on OCI Node A
   KB_COLLECTION: 'experience',               // pre-loaded collection (CV + project docs)
+  DEFAULT_MODEL: {kb: 'fast', own: 'fast'},  // modelo por defecto según el origen: 'fast' (rápido) o 'quality' (mejor, ~2x más lento). Se puede cambiar en el panel Technical
   TURNSTILE_SITEKEY: '0x4AAAAAAF7jDjLedqWrVfox',                     // clave PÚBLICA del widget de Cloudflare Turnstile ('' = sin captcha; el backend debe tener TURNSTILE_SECRET vacío)
 };
 // Pruebas locales: SOLO desde localhost/127.0.0.1 se puede apuntar a otra API (?api=URL). En producción (github.io) ese parámetro se
@@ -297,7 +298,7 @@ const T = {
     intro:'Pick a suggested question or write your own.', introOwn:'Upload a document (or use the sample) to start asking.',
     empty:'Ask something to see the internals.', captchaMsg:'Quick human check to keep the demo free for everyone:', captchaErr:'Verification failed. Please reload the page and try again.', based:'Based on the retrieved passages:', ready:'Ready', chunksN:'chunks',
     steps:['Upload','Extract text','Chunk','Embed','Index'], mockNote:'Simulated backend: retrieval and scores are computed in your browser. PDFs use sample text until the API is connected.',
-    sKb:['What did he build at Zinga Education?','Which AI models does he orchestrate?','What is his SAP Fiori experience?','Which certifications does he hold?'],
+    sKb:['What did he build at Test-me.app?','Which AI models does he orchestrate?','What is his SAP Fiori experience?','Which certifications does he hold?'],
     sOwn:['What are the main requirements?','Which technologies are mentioned?','Summarize the responsibilities','What are the key technical skills?'],
     vec:'vector', bm:'fts', fin:'final', ttft:'First token', queue:'Queue wait', queued:'Waiting for the model…', cachedNote:'cached answer', total:'Total latency', tin:'Prompt tokens', tout:'Output tokens', cost:'Est. cost', model:'Model'},
   es:{back:'← Portfolio', demoState:'modo demo', online:'en línea', warming:'arrancando…', modeR:'Recruiter', modeT:'Technical',
@@ -313,7 +314,7 @@ const T = {
     intro:'Elige una pregunta sugerida o escribe la tuya.', introOwn:'Sube un documento (o usa el ejemplo) para empezar a preguntar.',
     empty:'Haz una pregunta para ver el interior.', captchaMsg:'Una comprobación rápida de que eres humano, para mantener la demo gratuita:', captchaErr:'La verificación ha fallado. Recarga la página e inténtalo de nuevo.', based:'Según los pasajes recuperados:', ready:'Listo', chunksN:'chunks',
     steps:['Subida','Extraer texto','Chunking','Embeddings','Indexado'], mockNote:'Backend simulado: la recuperación y los scores se calculan en tu navegador. Los PDF usan texto de ejemplo hasta conectar la API.',
-    sKb:['¿Qué construyó en Zinga Education?','¿Qué modelos de IA orquesta?','¿Qué experiencia tiene con SAP Fiori?','¿Qué certificaciones tiene?'],
+    sKb:['¿Qué construyó en Test-me.app?','¿Qué modelos de IA orquesta?','¿Qué experiencia tiene con SAP Fiori?','¿Qué certificaciones tiene?'],
     sOwn:['¿Cuáles son los requisitos principales?','¿Qué tecnologías se mencionan?','Resume las responsabilidades','¿Cuáles son las habilidades técnicas clave?'],
     vec:'vector', bm:'fts', fin:'final', ttft:'Primer token', queue:'Espera en cola', queued:'Esperando al modelo…', cachedNote:'respuesta en caché', total:'Latencia total', tin:'Tokens de prompt', tout:'Tokens de salida', cost:'Coste est.', model:'Modelo'}
 };
@@ -450,7 +451,7 @@ function setMode(m){
 function setSrc(s){
   S.src = s; S.last = null;
   document.querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o.dataset.src===s));
-  $('upload').hidden = s!=='own';
+  $('upload').hidden = s!=='own'; $('model').value = CFG.DEFAULT_MODEL[s] || 'fast';
   if (s==='kb'){ S.chunks = KB; S.ready = true; $('docLabel').textContent = 'cv.pdf + projects'; if (!CFG.MOCK) loadKb(); }
   else { S.chunks = []; S.ready = false; S.docText=''; $('steps').hidden = true; $('del').hidden = true; $('docLabel').textContent = '—'; }
   $('q').disabled = !S.ready; $('send').disabled = !S.ready; $('q').placeholder = t(S.ready ? 'ph' : 'phLock');
@@ -601,6 +602,7 @@ $('rerun').onclick = () => S.last && ask(S.last.q);
 
 const qs = new URLSearchParams(location.search);
 applyLang((navigator.language||'en').toLowerCase().startsWith('es') ? 'es' : 'en');
+$('model').value = CFG.DEFAULT_MODEL.kb || 'fast';
 if (qs.get('mode')==='technical') setMode('technical');
 if (qs.get('source')==='own') setSrc('own');
 checkApi();
