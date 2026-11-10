@@ -525,7 +525,7 @@ async function ask(q){
           res = {retrieved:d.retrieved, prompt:d.prompt, answer:'', metrics:{timings:{...d.timings, llm:0}, tokens_in:0, tokens_out:0, cost_usd:0, model:d.model}};
           S.last = {q, p, res}; a.textContent = '…'; renderTab();           // el panel Technical se actualiza antes de generar
         } else if (ev === 'token'){ text += d.t; a.innerHTML = fmt(text); box.scrollTop = box.scrollHeight; }
-        else if (ev === 'done'){ res.answer = d.answer; res.metrics = d.metrics; res.degraded = d.degraded; }
+        else if (ev === 'done'){ res.answer = d.answer; res.metrics = d.metrics; res.degraded = d.degraded; a.innerHTML = fmt(d.answer); }   // el servidor puede haber recortado una copia del contexto
         else if (ev === 'error') throw new Error(d.message);
       }));
       if (!res) throw new Error('No response');
