@@ -293,7 +293,7 @@ const T = {
     limits:"Max 5 MB · 20 pages · auto-deleted after 60 min · please don't upload sensitive data",
     ph:'Ask a question…', phLock:'Upload a document to start', send:'Ask', grounded:'● grounded in retrieved text only',
     params:'Retrieval parameters', topk:'Top-k', chunk:'Chunk size', hybrid:'Hybrid (keyword + vector)', rerank:'Rerank', rerun:'↻ Re-run last query',
-    tRet:'Retrieval', tChunks:'Chunks', tPrompt:'Prompt', tMetrics:'Metrics', srcs:'Sources', nofind:"I couldn't find that in the document.",
+    tRet:'Retrieval', tChunks:'Chunks', tPrompt:'Prompt', tMetrics:'Metrics', srcs:'Sources', srcsLoose:'Retrieved passages (not cited by the model)', nofind:"I couldn't find that in the document.",
     intro:'Pick a suggested question or write your own.', introOwn:'Upload a document (or use the sample) to start asking.',
     empty:'Ask something to see the internals.', captchaMsg:'Quick human check to keep the demo free for everyone:', captchaErr:'Verification failed. Please reload the page and try again.', based:'Based on the retrieved passages:', ready:'Ready', chunksN:'chunks',
     steps:['Upload','Extract text','Chunk','Embed','Index'], mockNote:'Simulated backend: retrieval and scores are computed in your browser. PDFs use sample text until the API is connected.',
@@ -309,7 +309,7 @@ const T = {
     limits:'Máx. 5 MB · 20 páginas · se borra a los 60 min · no subas datos sensibles',
     ph:'Haz una pregunta…', phLock:'Sube un documento para empezar', send:'Preguntar', grounded:'● solo con texto recuperado',
     params:'Parámetros de recuperación', topk:'Top-k', chunk:'Tamaño de chunk', hybrid:'Híbrido (palabras clave + vector)', rerank:'Reranking', rerun:'↻ Repetir última consulta',
-    tRet:'Recuperación', tChunks:'Chunks', tPrompt:'Prompt', tMetrics:'Métricas', srcs:'Fuentes', nofind:'No he encontrado eso en el documento.',
+    tRet:'Recuperación', tChunks:'Chunks', tPrompt:'Prompt', tMetrics:'Métricas', srcs:'Fuentes', srcsLoose:'Pasajes recuperados (el modelo no los citó)', nofind:'No he encontrado eso en el documento.',
     intro:'Elige una pregunta sugerida o escribe la tuya.', introOwn:'Sube un documento (o usa el ejemplo) para empezar a preguntar.',
     empty:'Haz una pregunta para ver el interior.', captchaMsg:'Una comprobación rápida de que eres humano, para mantener la demo gratuita:', captchaErr:'La verificación ha fallado. Recarga la página e inténtalo de nuevo.', based:'Según los pasajes recuperados:', ready:'Listo', chunksN:'chunks',
     steps:['Subida','Extraer texto','Chunking','Embeddings','Indexado'], mockNote:'Backend simulado: la recuperación y los scores se calculan en tu navegador. Los PDF usan texto de ejemplo hasta conectar la API.',
@@ -495,9 +495,10 @@ function params(){ return {top_k:+$('topk').value, hybrid:$('hybrid').checked, r
 function finishAnswer(a, res){
   const n = res.retrieved.length;
   let used = [...new Set([...res.answer.matchAll(/\[(\d+)\]/g)].map(m=>+m[1]))].filter(k => k>=1 && k<=n);
-  if (!used.length) used = res.retrieved.slice(0,3).map((_,i)=>i+1);   // el modelo no citó: mostramos lo que se recuperó
+  const cited = used.length > 0;
+  if (!cited) used = res.retrieved.slice(0,3).map((_,i)=>i+1);   // el modelo no citó: mostramos lo recuperado, pero SIN llamarlo "fuentes"
   if (used.length){
-    a.insertAdjacentHTML('beforeend', `<details class="src"><summary>${esc(t('srcs'))} (${used.length})</summary>${used.map(k => { const r = res.retrieved[k-1];
+    a.insertAdjacentHTML('beforeend', `<details class="src"><summary>${esc(t(cited ? 'srcs' : 'srcsLoose'))} (${used.length})</summary>${used.map(k => { const r = res.retrieved[k-1];
       return `<div class="src-item" data-n="${k}"><b>[${k}]</b>${esc(r.source)} — ${esc(r.text.slice(0,150))}…</div>`; }).join('')}</details>`);
     a.querySelectorAll('.cite').forEach(c => c.onclick = () => { const d = a.querySelector('details'); if (!d) return; d.open = true;
       const it = d.querySelector(`[data-n="${c.dataset.n}"]`); if (!it) return; it.classList.add('flash'); setTimeout(()=>it.classList.remove('flash'), 1200); });
