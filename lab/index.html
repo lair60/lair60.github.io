@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Engineering Lab — Luis Inga Rivera</title>
+<meta name="description" content="A live RAG system: ask about my experience or upload your own document, then inspect chunks, scores and prompts.">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-12PJHL04XQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date()); gtag('config', 'G-12PJHL04XQ');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#10141a; --panel:#171d26; --panel-alt:#1c2430; --border:#2a3341;
+    --text:#e9edf2; --text-dim:#8b96a5; --amber:#ffb454; --cyan:#5ec8d8; --green:#7bc67e; --red:#e5736d;
+    --radius:10px; --display:'Space Grotesk',sans-serif; --body:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:var(--body); line-height:1.6; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 15% 0%,rgba(94,200,216,.05),transparent 40%),radial-gradient(circle at 85% 15%,rgba(255,180,84,.04),transparent 45%);}
+  a{color:inherit; text-decoration:none;}
+  button,input{font:inherit; color:inherit;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  [hidden]{display:none !important;}
+  ::selection{background:var(--amber); color:#10141a;}
+
+  /* nav */
+  header.nav{position:sticky; top:0; z-index:50; background:rgba(16,20,26,.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--border);}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:12px 24px; max-width:1180px; margin:0 auto; font-family:var(--mono); font-size:12.5px;}
+  .nav-l{display:flex; align-items:center; gap:14px; color:var(--text-dim);}
+  .nav-l a:hover{color:var(--cyan);}
+  .nav-r{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .seg{display:flex; border:1px solid var(--border); border-radius:6px; overflow:hidden;}
+  .seg button{background:none; border:none; color:var(--text-dim); padding:6px 11px; cursor:pointer; font-family:var(--mono); font-size:12px;}
+  .seg button.on{background:var(--amber); color:#10141a; font-weight:600;}
+  .seg button:not(.on):hover{color:var(--cyan);}
+  .state{display:flex; align-items:center; gap:7px; color:var(--text-dim); font-size:11.5px; border:1px solid var(--border); border-radius:99px; padding:4px 10px;}
+  .state i{width:7px; height:7px; border-radius:50%; background:var(--amber);}
+  .state.ok i{background:var(--green);}
+
+  /* intro + source picker */
+  .intro{padding:44px 0 22px;}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan); margin-bottom:12px;}
+  h1{font-family:var(--display); font-size:clamp(30px,5vw,44px); line-height:1.1; margin-bottom:10px;}
+  .intro p{color:var(--text-dim); max-width:62ch;}
+  .picker{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:6px 0 18px;}
+  @media (max-width:720px){ .picker{grid-template-columns:1fr;} }
+  .opt{text-align:left; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; cursor:pointer; transition:border-color .15s;}
+  .opt:hover{border-color:var(--cyan);}
+  .opt.on{border-color:var(--amber); box-shadow:0 0 0 1px var(--amber) inset;}
+  .opt b{font-family:var(--display); font-size:17px; display:block; margin-bottom:4px;}
+  .opt span{color:var(--text-dim); font-size:13.5px;}
+
+  /* upload */
+  .upload{background:var(--panel); border:1px dashed var(--border); border-radius:var(--radius); padding:18px; margin-bottom:18px;}
+  .drop{display:block; text-align:center; padding:22px; border:1px dashed var(--border); border-radius:8px; cursor:pointer; color:var(--text-dim); font-size:14px;}
+  .drop:hover,.drop.over{border-color:var(--cyan); color:var(--cyan);}
+  .drop input{display:none;}
+  .row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; margin-top:12px; font-family:var(--mono); font-size:11.5px; color:var(--text-dim);}
+  .link{background:none; border:none; color:var(--cyan); cursor:pointer; font-family:var(--mono); font-size:12px;}
+  .link:hover{text-decoration:underline;}
+  .link.danger{color:var(--red);}
+  .steps{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+  .step{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); border:1px solid var(--border); border-radius:99px; padding:4px 11px;}
+  .step.act{color:var(--amber); border-color:var(--amber);}
+  .step.done{color:var(--green); border-color:rgba(123,198,126,.5);}
+  .step.done::before{content:'✓ ';}
+
+  .captcha{display:flex; align-items:center; gap:16px; flex-wrap:wrap; background:var(--panel); border:1px solid var(--amber); border-radius:var(--radius); padding:14px 18px; margin-bottom:18px; font-size:14px;}
+
+  /* layout */
+  .grid{display:grid; grid-template-columns:1fr; gap:18px; padding-bottom:60px;}
+  body.tech .grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);}
+  @media (max-width:980px){ body.tech .grid{grid-template-columns:1fr;} }
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);}
+  .chat{display:flex; flex-direction:column; min-height:520px;}
+  .chat-top{display:flex; justify-content:space-between; gap:10px; padding:12px 16px; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em;}
+  .chat-top span:last-child{color:var(--green);}
+  .msgs{flex:1; padding:16px; display:flex; flex-direction:column; gap:14px; overflow-y:auto; max-height:560px;}
+  .u{align-self:flex-end; max-width:85%; background:var(--panel-alt); border:1px solid var(--border); border-radius:12px 12px 2px 12px; padding:9px 14px; font-size:14.5px;}
+  .a{max-width:95%; border-left:2px solid var(--amber); padding:2px 0 2px 14px; font-size:14.5px;}
+  .cite{font-family:var(--mono); font-size:10.5px; color:var(--cyan); background:none; border:1px solid var(--border); border-radius:4px; padding:0 5px; margin:0 1px; cursor:pointer;}
+  .cite:hover{border-color:var(--cyan);}
+  .src{margin-top:10px; display:grid; gap:6px;}
+  .src summary{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); cursor:pointer;}
+  .src-item{font-size:12.5px; color:var(--text-dim); background:var(--panel-alt); border:1px solid var(--border); border-radius:8px; padding:8px 11px; margin-top:6px;}
+  .src-item b{color:var(--cyan); font-family:var(--mono); font-weight:500; margin-right:6px;}
+  .src-item.flash{border-color:var(--amber);}
+  .hint{color:var(--text-dim); font-size:13.5px; padding:6px 0;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; padding:0 16px 12px;}
+  .chip{background:none; border:1px solid var(--border); border-radius:99px; padding:5px 12px; font-size:12.5px; color:var(--text-dim); cursor:pointer;}
+  .chip:hover{border-color:var(--cyan); color:var(--cyan);}
+  .ask{display:flex; gap:10px; padding:12px 16px; border-top:1px solid var(--border);}
+  .ask input{flex:1; min-width:0; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; outline:none;}
+  .ask input:focus{border-color:var(--cyan);}
+  .ask input:disabled{opacity:.5;}
+  .btn{font-family:var(--mono); font-size:13px; padding:10px 16px; border-radius:8px; border:1px solid transparent; background:var(--amber); color:#10141a; font-weight:600; cursor:pointer;}
+  .btn:hover{background:#ffc575;}
+  .btn:disabled{opacity:.45; cursor:not-allowed;}
+  .btn.ghost{background:none; border-color:var(--border); color:var(--text); font-weight:500;}
+  .btn.ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+  .foot-note{padding:0 16px 12px; font-size:11.5px; color:var(--text-dim); font-family:var(--mono);}
+
+  /* technical panel */
+  .tech{display:flex; flex-direction:column;}
+  .params{padding:14px 16px; border-bottom:1px solid var(--border); display:grid; gap:12px;}
+  .ptitle{font-family:var(--mono); font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em;}
+  .prow{display:grid; grid-template-columns:110px 1fr 34px; gap:10px; align-items:center; font-size:13px;}
+  .prow input[type=range]{accent-color:var(--amber); width:100%;}
+  .prow select{background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:5px 8px; color:var(--text); font-family:var(--mono); font-size:12px;}
+  .prow output{font-family:var(--mono); color:var(--amber); text-align:right;}
+  .tog{display:flex; flex-wrap:wrap; gap:16px; font-size:13px;}
+  .tog label{display:flex; align-items:center; gap:7px; cursor:pointer;}
+  .tog input{accent-color:var(--amber);}
+  .tabs{display:flex; border-bottom:1px solid var(--border); overflow-x:auto;}
+  .tabs button{background:none; border:none; border-bottom:2px solid transparent; padding:10px 16px; font-family:var(--mono); font-size:12px; color:var(--text-dim); cursor:pointer; white-space:nowrap;}
+  .tabs button.on{color:var(--amber); border-bottom-color:var(--amber);}
+  .tbody{padding:14px 16px; max-height:520px; overflow:auto; font-size:13px;}
+  .hd,.rr{display:grid; grid-template-columns:42px 1fr 52px 52px 60px; gap:8px; align-items:center; font-family:var(--mono); font-size:11.5px;}
+  .hd{color:var(--text-dim); text-transform:uppercase; font-size:10.5px; padding-bottom:6px;}
+  .rr{padding:8px 0; border-top:1px solid var(--border);}
+  .rr .t{grid-column:1/-1; color:var(--text-dim); font-family:var(--body); font-size:12.5px;}
+  .bar{height:5px; background:var(--panel-alt); border-radius:3px; overflow:hidden;}
+  .bar i{display:block; height:100%; background:linear-gradient(90deg,var(--cyan),var(--amber));}
+  .up{color:var(--green);} .dn{color:var(--red);}
+  pre{white-space:pre-wrap; word-break:break-word; font-family:var(--mono); font-size:11.5px; color:var(--text-dim); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px;}
+  .ck{padding:9px 0; border-top:1px solid var(--border);}
+  .ck .m{font-family:var(--mono); font-size:11px; color:var(--cyan); display:flex; flex-wrap:wrap; gap:4px 12px;}
+  .ck .v{font-family:var(--mono); font-size:10.5px; color:var(--text-dimmer,#4a5568); margin:2px 0;}
+  .ck p{color:var(--text-dim); font-size:12.5px;}
+  .mt{display:grid; grid-template-columns:130px 1fr 64px; gap:10px; align-items:center; font-family:var(--mono); font-size:11.5px; padding:5px 0;}
+  .kv{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-top:14px;}
+  .kv div{background:var(--panel-alt); border:1px solid var(--border); border-radius:8px; padding:10px;}
+  .kv b{display:block; font-family:var(--display); font-size:19px; color:var(--amber);}
+  .kv span{font-family:var(--mono); font-size:10.5px; color:var(--text-dim); text-transform:uppercase;}
+  .empty{color:var(--text-dim); font-size:13.5px;}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-l"><a href="../" data-i18n="back">← Portfolio</a><span>/</span><span>ai-lab</span></div>
+    <div class="nav-r">
+      <span class="state" id="apiState"><i></i><span data-i18n="demoState">demo mode</span></span>
+      <div class="seg" id="modeSeg" role="group" aria-label="Mode">
+        <button type="button" data-mode="recruiter" class="on" data-i18n="modeR">Recruiter</button>
+        <button type="button" data-mode="technical" data-i18n="modeT">Technical</button>
+      </div>
+      <div class="seg" id="langSeg" role="group" aria-label="Language">
+        <button type="button" data-lang="en" class="on">EN</button>
+        <button type="button" data-lang="es">ES</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <div class="eyebrow">AI Engineering Lab</div>
+    <h1 data-i18n="title">Ask a document. Then see how it answered.</h1>
+    <p data-i18n="sub">A retrieval-augmented system you can test. Explore my experience or bring your own document; switch to Technical mode to inspect every step.</p>
+  </div>
+
+  <div class="picker">
+    <button type="button" class="opt on" data-src="kb"><b data-i18n="srcKb">Explore my experience</b><span data-i18n="srcKbD">Pre-loaded knowledge base: my CV and project docs. No upload needed.</span></button>
+    <button type="button" class="opt" data-src="own"><b data-i18n="srcOwn">Try your own documents</b><span data-i18n="srcOwnD">Upload a PDF (a job description, your CV…). Private temporary collection.</span></button>
+  </div>
+
+  <div class="upload" id="upload" hidden>
+    <label class="drop" id="drop"><input type="file" id="file" accept=".pdf,.txt,.md"><span data-i18n="drop">Drop a PDF / .txt here or click to browse</span></label>
+    <div class="steps" id="steps" hidden></div>
+    <div class="row">
+      <span data-i18n="limits">Max 5 MB · 20 pages · auto-deleted after 60 min · please don't upload sensitive data</span>
+      <span><button type="button" class="link" id="sample" data-i18n="sample">use a sample job description</button> · <button type="button" class="link danger" id="del" hidden data-i18n="del">Delete my data</button></span>
+    </div>
+  </div>
+
+  <div class="captcha" id="captcha" hidden><span data-i18n="captchaMsg">Quick human check to keep the demo free for everyone:</span><div id="captchaWidget"></div></div>
+
+  <div class="grid">
+    <div class="card chat">
+      <div class="chat-top"><span id="docLabel">cv.pdf + projects</span><span data-i18n="grounded">● grounded in retrieved text only</span></div>
+      <div class="msgs" id="msgs"></div>
+      <div class="chips" id="chips"></div>
+      <div class="ask">
+        <input id="q" type="text" autocomplete="off" data-i18n-ph="ph" placeholder="Ask a question…">
+        <button type="button" class="btn" id="send" data-i18n="send">Ask</button>
+      </div>
+      <div class="foot-note" id="foot"></div>
+    </div>
+
+    <aside class="card tech" id="tech" hidden>
+      <div class="params">
+        <div class="ptitle" data-i18n="params">Retrieval parameters</div>
+        <div class="prow"><span data-i18n="topk">Top-k</span><input type="range" id="topk" min="1" max="8" value="4"><output id="topkO">4</output></div>
+        <div class="prow" id="chunkRow"><span data-i18n="chunk">Chunk size</span><input type="range" id="chunkSz" min="200" max="800" step="100" value="400"><output id="chunkO">400</output></div>
+        <div class="prow"><span data-i18n="model">Model</span><select id="model"><option value="fast">fast · Qwen 1.5B</option><option value="quality">quality · Qwen 3B</option></select><span></span></div>
+        <div class="tog">
+          <label><input type="checkbox" id="hybrid" checked><span data-i18n="hybrid">Hybrid (BM25 + vector)</span></label>
+          <label><input type="checkbox" id="rerank"><span data-i18n="rerank">Rerank</span></label>
+        </div>
+        <div><button type="button" class="btn ghost" id="rerun" data-i18n="rerun">↻ Re-run last query</button></div>
+      </div>
+      <div class="tabs" id="tabs">
+        <button type="button" data-tab="ret" class="on" data-i18n="tRet">Retrieval</button>
+        <button type="button" data-tab="chunks" data-i18n="tChunks">Chunks</button>
+        <button type="button" data-tab="prompt" data-i18n="tPrompt">Prompt</button>
+        <button type="button" data-tab="metrics" data-i18n="tMetrics">Metrics</button>
+      </div>
+      <div class="tbody" id="tbody"></div>
+    </aside>
+  </div>
+</main>
+
+<script>
+/* =====================================================================
+   BACKEND HOOKS — set MOCK:false once the FastAPI service is up.
+   Expected contracts (JSON):
+   POST   /v1/lab/collections                      -> {collection_id, expires_at}
+   POST   /v1/lab/collections/{id}/documents       (multipart "file") -> {doc_id, chunks:[{id,text,source,chars}]}
+                                                    (or poll GET .../documents/{doc_id}/status while Celery works)
+   POST   /v1/lab/query {collection, question, top_k, hybrid, rerank, chunk_size}
+          -> {retrieved:[{id,text,source,scores:{vector,bm25,fused,rerank,prev_rank}}],
+              prompt, answer, metrics:{timings:{embed,vector,bm25,rerank,llm}, tokens_in, tokens_out, cost_usd, model}}
+   DELETE /v1/lab/collections/{id}
+   GET    /health
+   ===================================================================== */
+const CFG = {
+  MOCK: false,
+  API_BASE: 'https://lair60-api.duckdns.org',   // Caddy + DuckDNS on OCI Node A
+  KB_COLLECTION: 'experience',               // pre-loaded collection (CV + project docs)
+  TURNSTILE_SITEKEY: '0x4AAAAAAF7jDjLedqWrVfox',                     // clave PÚBLICA del widget de Cloudflare Turnstile ('' = sin captcha; el backend debe tener TURNSTILE_SECRET vacío)
+};
+// Pruebas locales: SOLO desde localhost/127.0.0.1 se puede apuntar a otra API (?api=URL). En producción (github.io) ese parámetro se
+// ignora: si no, un enlace malicioso podría redirigir los documentos que suba un visitante. ?mock=1 fuerza la demo en cualquier sitio.
+(() => {
+  const q = new URLSearchParams(location.search), local = ['localhost', '127.0.0.1'].includes(location.hostname);
+  if (local && q.get('api')) { CFG.API_BASE = q.get('api').replace(/\/+$/, ''); CFG.MOCK = false; }
+  if (local && q.get('sitekey')) CFG.TURNSTILE_SITEKEY = q.get('sitekey');     // p. ej. la clave de prueba 1x00000000000000000000AA
+  if (q.get('mock') === '1') CFG.MOCK = true;
+})();
+// Session id in a header (not a cookie): github.io -> duckdns.org is cross-site and third-party cookies get blocked.
+const SID = (() => { try { let v = sessionStorage.getItem('lab_sid'); if (!v){ v = crypto.randomUUID(); sessionStorage.setItem('lab_sid', v); } return v; } catch { return crypto.randomUUID(); } })();
+const http = async (path, opts={}) => {
+  const r = await fetch(CFG.API_BASE + path, {...opts, headers:{...(opts.headers||{}), 'X-Session-Id': SID}});
+  if (!r.ok){ let d = ''; try { d = (await r.json()).detail; } catch {}
+    const e = new Error(typeof d === 'string' && d ? d : path + ' -> ' + r.status); if (d === 'captcha_required') e.code = 'captcha'; throw e; }
+  return r.json();
+};
+
+/* ------------------------- Turnstile (captcha de Cloudflare) ------------------------- */
+// El backend responde 403 "captcha_required" ante acciones caras (subir, preguntar fuera de caché). Entonces se muestra el widget,
+// se valida el token en el servidor (POST /v1/lab/verify) y se reintenta la acción UNA vez. api.js debe cargarse desde el CDN de Cloudflare.
+let tsScript = null, captchaP = null;
+function loadTurnstile(){
+  if (window.turnstile) return Promise.resolve();
+  return tsScript ||= new Promise((res, rej) => { const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async = true; s.onload = res;
+    s.onerror = () => { tsScript = null; rej(new Error(t('captchaErr'))); }; document.head.appendChild(s); });
+}
+function solveCaptcha(){
+  return captchaP ||= (async () => {
+    if (!CFG.TURNSTILE_SITEKEY) throw new Error(t('captchaErr'));
+    await loadTurnstile();
+    const box = $('captcha'); box.hidden = false; let id;
+    try {
+      const token = await new Promise((res, rej) => { id = window.turnstile.render('#captchaWidget', {sitekey: CFG.TURNSTILE_SITEKEY, theme: 'dark',
+        callback: res, 'error-callback': () => rej(new Error(t('captchaErr'))), 'timeout-callback': () => rej(new Error(t('captchaErr')))}); });
+      await http('/v1/lab/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token})});
+    } finally { try { window.turnstile.remove(id); } catch {} box.hidden = true; }
+  })().finally(() => { captchaP = null; });
+}
+async function withCaptcha(fn){
+  try { return await fn(); }
+  catch(e){ if (e.code !== 'captcha') throw e; await solveCaptcha(); return await fn(); }
+}
+
+/* ------------------------- i18n ------------------------- */
+const T = {
+  en:{back:'← Portfolio', demoState:'demo mode', online:'online', warming:'warming up…', modeR:'Recruiter', modeT:'Technical',
+    title:'Ask a document. Then see how it answered.',
+    sub:'A retrieval-augmented system you can test. Explore my experience or bring your own document; switch to Technical mode to inspect every step.',
+    srcKb:'Explore my experience', srcKbD:'Pre-loaded knowledge base: my CV and project docs. No upload needed.',
+    srcOwn:'Try your own documents', srcOwnD:'Upload a PDF (a job description, your CV…). Private temporary collection.',
+    drop:'Drop a PDF / .txt here or click to browse', sample:'use a sample job description', del:'Delete my data',
+    limits:"Max 5 MB · 20 pages · auto-deleted after 60 min · please don't upload sensitive data",
+    ph:'Ask a question…', phLock:'Upload a document to start', send:'Ask', grounded:'● grounded in retrieved text only',
+    params:'Retrieval parameters', topk:'Top-k', chunk:'Chunk size', hybrid:'Hybrid (keyword + vector)', rerank:'Rerank', rerun:'↻ Re-run last query',
+    tRet:'Retrieval', tChunks:'Chunks', tPrompt:'Prompt', tMetrics:'Metrics', srcs:'Sources', nofind:"I couldn't find that in the document.",
+    intro:'Pick a suggested question or write your own.', introOwn:'Upload a document (or use the sample) to start asking.',
+    empty:'Ask something to see the internals.', captchaMsg:'Quick human check to keep the demo free for everyone:', captchaErr:'Verification failed. Please reload the page and try again.', based:'Based on the retrieved passages:', ready:'Ready', chunksN:'chunks',
+    steps:['Upload','Extract text','Chunk','Embed','Index'], mockNote:'Simulated backend: retrieval and scores are computed in your browser. PDFs use sample text until the API is connected.',
+    sKb:['What did he build at Test-me.app?','Which AI models does he orchestrate?','What is his SAP Fiori experience?','Which certifications does he hold?'],
+    sOwn:['What are the main requirements?','Which technologies are mentioned?','Summarize the responsibilities','What are the key technical skills?'],
+    vec:'vector', bm:'fts', fin:'final', ttft:'First token', queue:'Queue wait', queued:'Waiting for the model…', cachedNote:'cached answer', total:'Total latency', tin:'Prompt tokens', tout:'Output tokens', cost:'Est. cost', model:'Model'},
+  es:{back:'← Portfolio', demoState:'modo demo', online:'en línea', warming:'arrancando…', modeR:'Recruiter', modeT:'Technical',
+    title:'Pregunta a un documento. Luego mira cómo respondió.',
+    sub:'Un sistema RAG que puedes probar. Explora mi experiencia o trae tu propio documento; cambia a modo Technical para inspeccionar cada paso.',
+    srcKb:'Explora mi experiencia', srcKbD:'Base de conocimiento precargada: mi CV y documentación de proyectos. Sin subir nada.',
+    srcOwn:'Prueba tus documentos', srcOwnD:'Sube un PDF (una oferta de trabajo, tu CV…). Colección privada y temporal.',
+    drop:'Suelta un PDF / .txt aquí o haz clic para elegir', sample:'usar una oferta de ejemplo', del:'Borrar mis datos',
+    limits:'Máx. 5 MB · 20 páginas · se borra a los 60 min · no subas datos sensibles',
+    ph:'Haz una pregunta…', phLock:'Sube un documento para empezar', send:'Preguntar', grounded:'● solo con texto recuperado',
+    params:'Parámetros de recuperación', topk:'Top-k', chunk:'Tamaño de chunk', hybrid:'Híbrido (palabras clave + vector)', rerank:'Reranking', rerun:'↻ Repetir última consulta',
+    tRet:'Recuperación', tChunks:'Chunks', tPrompt:'Prompt', tMetrics:'Métricas', srcs:'Fuentes', nofind:'No he encontrado eso en el documento.',
+    intro:'Elige una pregunta sugerida o escribe la tuya.', introOwn:'Sube un documento (o usa el ejemplo) para empezar a preguntar.',
+    empty:'Haz una pregunta para ver el interior.', captchaMsg:'Una comprobación rápida de que eres humano, para mantener la demo gratuita:', captchaErr:'La verificación ha fallado. Recarga la página e inténtalo de nuevo.', based:'Según los pasajes recuperados:', ready:'Listo', chunksN:'chunks',
+    steps:['Subida','Extraer texto','Chunking','Embeddings','Indexado'], mockNote:'Backend simulado: la recuperación y los scores se calculan en tu navegador. Los PDF usan texto de ejemplo hasta conectar la API.',
+    sKb:['¿Qué construyó en Test-me.app?','¿Qué modelos de IA orquesta?','¿Qué experiencia tiene con SAP Fiori?','¿Qué certificaciones tiene?'],
+    sOwn:['¿Cuáles son los requisitos principales?','¿Qué tecnologías se mencionan?','Resume las responsabilidades','¿Cuáles son las habilidades técnicas clave?'],
+    vec:'vector', bm:'fts', fin:'final', ttft:'Primer token', queue:'Espera en cola', queued:'Esperando al modelo…', cachedNote:'respuesta en caché', total:'Latencia total', tin:'Tokens de prompt', tout:'Tokens de salida', cost:'Coste est.', model:'Modelo'}
+};
+
+/* ------------------------- demo data ------------------------- */
+const KB = [
+ ['Profile','Luis Inga Rivera is a full-stack engineer with 15+ years in production, based between London and Madrid, now focused on AI-native products.'],
+ ['Test-me.app','At Test-me.app (03/2025–08/2026) he designed and built the backend and cross-platform client from scratch: an async pipeline that turns uploaded documents into quizzes and real-time tutoring.'],
+ ['Test-me.app · backend','The backend uses FastAPI and Celery with Redis as broker and result backend, running long text extraction and AI calls off the request path with retries, timeouts and exponential backoff.'],
+ ['Test-me.app · streaming','Native WebSockets stream AI response chunks live, with Redis Pub/Sub message recovery and automatic reconnection across iOS, Android and web.'],
+ ['Test-me.app · AI','A unified backend routes requests across Gemini, OpenAI and DeepSeek models for document understanding, quiz generation and math tutoring, with throttling for cost-efficient token use.'],
+ ['Test-me.app · client','A single Expo (React Native) codebase serves web, iOS and Android, with authentication and payments through Stripe on web and native in-app purchases on mobile.'],
+ ['Capita PLC','At Capita PLC (04/2016–08/2024) he migrated a Web Dynpro Java application to SAP Fiori, built UI5 apps with OData v2 and deployed them to SAP Launchpad.'],
+ ['Capita PLC · incident','He traced a production incident to a migration misconfiguration and fixed it, restoring service for thousands of German users.'],
+ ['Earlier roles','Earlier roles (2007–2015) covered a trading system with AngularJS and PHP, WebRTC video conferencing with Node.js, and banking device software in Java and C++.'],
+ ['Certifications','Certifications: AWS Certified Generative AI Developer Professional (10/2026), AWS Certified DevOps Engineer Professional (07/2020), SAP Certified Development Associate Fiori (03/2018).'],
+ ['Infrastructure','Infrastructure experience includes OCI load balancer and object storage, MongoDB, Supabase and AWS.']
+].map((r,i)=>({id:'c-'+String(i+1).padStart(2,'0'), source:r[0], text:r[1]}));
+
+const SAMPLE_JD = "We are hiring a Senior Full-Stack Engineer to build AI-powered features for our learning platform. Responsibilities: design and own backend services in Python (FastAPI), build real-time features, integrate LLM providers and mentor other engineers. Requirements: 5+ years of experience with Python or Node.js. Experience with REST APIs and WebSockets. Hands-on experience with Redis and asynchronous task queues such as Celery. Familiarity with cloud platforms (AWS, OCI or GCP). Nice to have: experience with RAG systems, vector databases and LLM evaluation, plus React or React Native. We offer hybrid work in Madrid, flexible hours and a learning budget.";
+
+/* ------------------------- state ------------------------- */
+const S = {lang:'en', mode:'recruiter', src:'kb', tab:'ret', chunks:KB, docText:'', docName:'', ready:true, collection:null, last:null, busy:false};
+const $ = id => document.getElementById(id);
+const t = k => (T[S.lang][k] ?? T.en[k]);
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const track = (n,p={}) => { if (typeof gtag==='function') gtag('event', n, {language:S.lang, ...p}); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ------------------------- MOCK retrieval engine ------------------------- */
+const STOP = new Set('the and for with what which are his has have that this from into about does did how who was were use used mentioned main key any can you your she him her its their them than then also but not all one out our get got'.split(' '));
+const ES = {tecnologías:'technologies',tecnologia:'technology',requisitos:'requirements',responsabilidades:'responsibilities',certificaciones:'certifications',construyó:'built',modelos:'models',experiencia:'experience',habilidades:'skills',resume:'summarize',orquesta:'orchestrate',principales:'main'};
+const toks = s => s.toLowerCase().replace(/[^\p{L}\p{N}+#.]/gu,' ').split(/\s+/).map(w=>ES[w]||w).filter(w=>w.length>2 && !STOP.has(w));
+const hash = s => { let h=2166136261; for (const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619);} return (h>>>0)/4294967295; };
+const pre = w => w.slice(0,5);
+
+function mockRetrieve(q, p){
+  const qt = toks(q), docs = S.chunks.map(c => ({c, tk:toks(c.text)}));
+  const N = docs.length;
+  const idf = w => Math.log(1 + (N - docs.filter(d=>d.tk.includes(w)).length + .5) / (docs.filter(d=>d.tk.includes(w)).length + .5));
+  let rows = docs.map(({c,tk}) => {
+    let bm = 0; qt.forEach(w => { const tf = tk.filter(x=>x===w).length; bm += idf(w) * (tf*2.2)/(tf+1.2); });
+    const ov = qt.length ? qt.filter(w => tk.some(x => pre(x)===pre(w))).length / qt.length : 0;
+    const vec = ov ? Math.min(.97, .38 + .52*ov + hash(c.id+q)*.08) : .12 + hash(c.id+q)*.12;
+    return {...c, bm, vec};
+  });
+  const maxBm = Math.max(...rows.map(r=>r.bm), 1e-9);
+  rows.forEach(r => r.bm = r.bm / maxBm);
+  const rank = (key, arr) => [...arr].sort((a,b)=>b[key]-a[key]).map(r=>r.id);
+  const rv = rank('vec', rows), rb = rank('bm', rows);
+  rows.forEach(r => { r.fused = p.hybrid ? (1/(60+rv.indexOf(r.id)+1) + 1/(60+rb.indexOf(r.id)+1)) * 30 : r.vec; });
+  let ordered = [...rows].sort((a,b)=>b.fused-a.fused);
+  ordered.forEach((r,i)=> r.prev_rank = i+1);
+  const pool = ordered.slice(0, p.rerank ? Math.max(p.top_k*2, 6) : p.top_k);
+  if (p.rerank){
+    pool.forEach(r => { const ov = qt.length ? qt.filter(w => toks(r.text).includes(w)).length / qt.length : 0;
+      r.rerank = Math.min(.99, .5*r.vec + .3*r.bm + .35*ov); });
+    pool.sort((a,b)=>b.rerank-a.rerank);
+  }
+  return pool.slice(0, p.top_k).map((r,i) => ({id:r.id, text:r.text, source:r.source,
+    scores:{vector:r.vec, bm25:r.bm, fused:r.fused, rerank:r.rerank ?? null, prev_rank:r.prev_rank, rank:i+1}}));
+}
+
+function mockQuery(q, p){
+  const retrieved = mockRetrieve(q, p);
+  const good = retrieved.filter(r => (p.rerank ? r.scores.rerank : r.scores.bm25) > (p.rerank ? .3 : .05));
+  const ctx = retrieved.map((r,i)=>`[${i+1}] (${r.source}) ${r.text}`).join('\n');
+  const prompt = `SYSTEM: You answer ONLY from the context below. If the answer is not in the context, say you don't know. Cite passages as [n].\n\nCONTEXT:\n${ctx}\n\nQUESTION: ${q}\nANSWER:`;
+  let answer;
+  if (!good.length) answer = t('nofind');
+  else answer = t('based') + ' ' + good.slice(0,3).map(r => { const n = retrieved.indexOf(r)+1; return r.text.split(/(?<=[.!?])\s/)[0] + ` [${n}]`; }).join(' ');
+  const tin = Math.ceil(prompt.length/4), tout = Math.ceil(answer.length/4);
+  const tm = {embed:15+Math.random()*15, vector:6+Math.random()*8, bm25:p.hybrid?3+Math.random()*4:0, rerank:p.rerank?60+Math.random()*50:0, llm:280+tout*14+Math.random()*80};
+  return {retrieved, prompt, answer, metrics:{timings:tm, tokens_in:tin, tokens_out:tout, cost_usd:(tin*.1+tout*.4)/1e6, model:'gemini-flash (mock)'}};
+}
+
+async function realQueryStream(q, p, on){
+  const r = await fetch(CFG.API_BASE + '/v1/lab/query', {method:'POST', headers:{'Content-Type':'application/json', 'X-Session-Id': SID},
+    body: JSON.stringify({collection: S.src==='kb' ? 'experience' : S.collection, question:q, top_k:p.top_k, hybrid:p.hybrid, rerank:p.rerank, model:p.model})});
+  if (!r.ok){ let d = ''; try { d = (await r.json()).detail; } catch {}
+    const e = new Error(typeof d === 'string' && d ? d : 'HTTP ' + r.status); if (d === 'captcha_required') e.code = 'captcha'; throw e; }
+  const reader = r.body.getReader(), dec = new TextDecoder(); let buf = '';
+  try {
+    for (;;){
+      const {value, done} = await reader.read(); if (done) break;
+      buf += dec.decode(value, {stream:true}); let i;
+      while ((i = buf.indexOf('\n\n')) >= 0){
+        const block = buf.slice(0, i); buf = buf.slice(i + 2);
+        const ev = /^event: (.+)$/m.exec(block), d = /^data: (.+)$/m.exec(block);
+        if (ev && d) on(ev[1], JSON.parse(d[1]));
+      }
+    }
+  } finally { reader.cancel().catch(()=>{}); }
+}
+async function realUpload(file, onStep){
+  await realDelete();                                   // una sola colección temporal por visitante
+  const c = await http('/v1/lab/collections', {method:'POST'});
+  S.collection = c.collection_id;
+  const fd = new FormData(); fd.append('file', file); fd.append('chunk_chars', $('chunkSz').value);
+  const d = await withCaptcha(() => http(`/v1/lab/collections/${c.collection_id}/documents`, {method:'POST', body:fd}));
+  let ready = false;
+  for (let i=0; i<180 && !ready; i++){                  // sondeo cada segundo (hasta 3 min)
+    const st = await http(`/v1/lab/collections/${c.collection_id}/documents/${d.doc_id}/status`);
+    if (st.status === 'failed') throw new Error(st.error || 'Processing failed');
+    if (st.status === 'ready') ready = true; else { onStep(Math.max(0, st.step)); await sleep(1000); }
+  }
+  if (!ready) throw new Error('Processing timed out');
+  return (await http(`/v1/lab/collections/${c.collection_id}/chunks`)).chunks;
+}
+async function realDelete(){ if (S.collection) await http(`/v1/lab/collections/${S.collection}`, {method:'DELETE'}).catch(()=>{}); S.collection = null; }
+
+/* ------------------------- chunking (mock) ------------------------- */
+function chunkText(text, size){
+  const sents = text.replace(/\s+/g,' ').split(/(?<=[.!?:])\s+/), out = []; let cur = '';
+  sents.forEach(s => { if ((cur + ' ' + s).length > size && cur){ out.push(cur.trim()); cur = s; } else cur += ' ' + s; });
+  if (cur.trim()) out.push(cur.trim());
+  return out.map((x,i)=>({id:'d-'+String(i+1).padStart(2,'0'), source:(S.docName||'document')+' · p.1', text:x}));
+}
+
+/* ------------------------- UI ------------------------- */
+function applyLang(l){
+  S.lang = l; document.documentElement.lang = l;
+  document.querySelectorAll('[data-i18n]').forEach(el => { const v = T[l][el.dataset.i18n]; if (v !== undefined) el.textContent = v; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = t(S.ready ? 'ph' : 'phLock'));
+  document.querySelectorAll('#langSeg button').forEach(b => b.classList.toggle('on', b.dataset.lang===l));
+  $('foot').textContent = CFG.MOCK ? t('mockNote') : '';
+  renderChips(); renderIntro(); renderTab(); renderSteps();
+}
+function setMode(m){
+  S.mode = m; document.body.classList.toggle('tech', m==='technical'); $('tech').hidden = m!=='technical';
+  document.querySelectorAll('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.mode===m));
+  track('lab_mode_change', {mode:m}); renderTab();
+}
+function setSrc(s){
+  S.src = s; S.last = null;
+  document.querySelectorAll('.opt').forEach(o => o.classList.toggle('on', o.dataset.src===s));
+  $('upload').hidden = s!=='own';
+  if (s==='kb'){ S.chunks = KB; S.ready = true; $('docLabel').textContent = 'cv.pdf + projects'; if (!CFG.MOCK) loadKb(); }
+  else { S.chunks = []; S.ready = false; S.docText=''; $('steps').hidden = true; $('del').hidden = true; $('docLabel').textContent = '—'; }
+  $('q').disabled = !S.ready; $('send').disabled = !S.ready; $('q').placeholder = t(S.ready ? 'ph' : 'phLock');
+  $('msgs').innerHTML = ''; renderChips(); renderIntro(); renderTab(); track('lab_source_select', {source:s});
+}
+function renderIntro(){ if (!$('msgs').querySelector('.u')) $('msgs').innerHTML = `<div class="hint">${esc(t(S.ready ? 'intro' : 'introOwn'))}</div>`; }
+function renderChips(){
+  $('chips').innerHTML = S.ready ? t(S.src==='kb' ? 'sKb' : 'sOwn').map(q => `<button type="button" class="chip">${esc(q)}</button>`).join('') : '';
+  $('chips').querySelectorAll('.chip').forEach(c => c.onclick = () => ask(c.textContent));
+}
+function renderSteps(active=-1, done=-1){
+  $('steps').innerHTML = t('steps').map((s,i) => `<span class="step ${i<=done?'done':i===active?'act':''}">${esc(s)}</span>`).join('') +
+    (done>=4 ? `<span class="step done">${esc(t('ready'))} · ${S.chunks.length} ${esc(t('chunksN'))}</span>` : '');
+}
+
+function showIngestError(e){
+  $('steps').innerHTML = `<span class="step" style="color:var(--red);border-color:var(--red)">⚠ ${esc(e.message)}</span>`;
+  S.ready = false; $('del').hidden = false; $('docLabel').textContent = '—';
+  track('lab_upload_error', {message: String(e.message).slice(0,80)});
+}
+async function ingest(file){
+  S.ready = false; $('q').disabled = true; $('send').disabled = true; $('steps').hidden = false; $('del').hidden = false;
+  if (!CFG.MOCK && !file) file = new File([SAMPLE_JD], 'sample_job_description.txt', {type:'text/plain'});
+  S.docName = file ? file.name : 'sample_job_description.pdf'; $('docLabel').textContent = S.docName;
+  track('lab_upload', {type: file ? (file.type||'unknown') : 'sample'});
+  if (!CFG.MOCK){
+    try { renderSteps(0,-1); S.chunks = await realUpload(file, k => renderSteps(k, k-1)); S.docText = ''; }   // troceado y embeddings en el servidor
+    catch(e){ showIngestError(e); return; }
+  } else {
+    let text = SAMPLE_JD;
+    if (file && /\.(txt|md)$/i.test(file.name)) text = await file.text();
+    S.docText = text;
+    for (let i=0;i<5;i++){ renderSteps(i,i-1); await sleep(420); }
+    S.chunks = chunkText(text, +$('chunkSz').value);
+  }
+  renderSteps(-1,4); S.ready = true; $('q').disabled = false; $('send').disabled = false; $('q').placeholder = t('ph');
+  $('msgs').innerHTML = ''; renderChips(); renderIntro(); renderTab();
+}
+
+function params(){ return {top_k:+$('topk').value, hybrid:$('hybrid').checked, rerank:$('rerank').checked, chunk_size:+$('chunkSz').value, model:$('model').value}; }
+
+function finishAnswer(a, res){
+  const n = res.retrieved.length;
+  let used = [...new Set([...res.answer.matchAll(/\[(\d+)\]/g)].map(m=>+m[1]))].filter(k => k>=1 && k<=n);
+  if (!used.length) used = res.retrieved.slice(0,3).map((_,i)=>i+1);   // el modelo no citó: mostramos lo que se recuperó
+  if (used.length){
+    a.insertAdjacentHTML('beforeend', `<details class="src"><summary>${esc(t('srcs'))} (${used.length})</summary>${used.map(k => { const r = res.retrieved[k-1];
+      return `<div class="src-item" data-n="${k}"><b>[${k}]</b>${esc(r.source)} — ${esc(r.text.slice(0,150))}…</div>`; }).join('')}</details>`);
+    a.querySelectorAll('.cite').forEach(c => c.onclick = () => { const d = a.querySelector('details'); if (!d) return; d.open = true;
+      const it = d.querySelector(`[data-n="${c.dataset.n}"]`); if (!it) return; it.classList.add('flash'); setTimeout(()=>it.classList.remove('flash'), 1200); });
+  }
+  if (res.metrics && res.metrics.cached) a.insertAdjacentHTML('beforeend', `<div class="hint">⚡ ${esc(t('cachedNote'))}</div>`);
+}
+
+async function ask(q){
+  q = (q||'').trim(); if (!q || S.busy || !S.ready) return;
+  S.busy = true; $('q').value = ''; const box = $('msgs'); box.querySelector('.hint')?.remove();
+  box.insertAdjacentHTML('beforeend', `<div class="u">${esc(q)}</div>`);
+  const a = document.createElement('div'); a.className = 'a'; a.textContent = '…'; box.appendChild(a); box.scrollTop = box.scrollHeight;
+  const p = params(); let res;
+  track('lab_query', {mode:S.mode, source:S.src, hybrid:p.hybrid, rerank:p.rerank, model:p.model});
+  try {
+    if (CFG.MOCK){
+      await sleep(350); res = mockQuery(q,p); S.last = {q, p, res};
+      const words = res.answer.split(' '); a.textContent = '';
+      for (let i=0;i<words.length;i++){ a.innerHTML = fmt(words.slice(0,i+1).join(' ')); box.scrollTop = box.scrollHeight; await sleep(22); }
+    } else {
+      let text = '';
+      await withCaptcha(() => realQueryStream(q, p, (ev, d) => {            // SSE: queue · retrieved · token · done · error
+        if (ev === 'queue') a.textContent = `⏳ ${t('queued')} #${d.position} (~${d.eta_s}s)`;
+        else if (ev === 'retrieved'){
+          res = {retrieved:d.retrieved, prompt:d.prompt, answer:'', metrics:{timings:{...d.timings, llm:0}, tokens_in:0, tokens_out:0, cost_usd:0, model:d.model}};
+          S.last = {q, p, res}; a.textContent = '…'; renderTab();           // el panel Technical se actualiza antes de generar
+        } else if (ev === 'token'){ text += d.t; a.innerHTML = fmt(text); box.scrollTop = box.scrollHeight; }
+        else if (ev === 'done'){ res.answer = d.answer; res.metrics = d.metrics; res.degraded = d.degraded; }
+        else if (ev === 'error') throw new Error(d.message);
+      }));
+      if (!res) throw new Error('No response');
+    }
+  } catch(e){ a.textContent = '⚠ ' + e.message; S.busy = false; renderTab(); return; }
+  finishAnswer(a, res); S.busy = false; renderTab();
+}
+const fmt = s => esc(s).replace(/\[(\d+)\]/g, '<button type="button" class="cite" data-n="$1">$1</button>').replace(/data-n=/g,'data-n=');
+
+/* ------------------------- technical panel ------------------------- */
+const pct = v => Math.max(2, Math.min(100, v*100)).toFixed(0) + '%';
+const f2 = v => v==null ? '—' : v.toFixed(2);
+function renderTab(){
+  const b = $('tbody'); if (S.mode!=='technical') return;
+  document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab===S.tab));
+  const L = S.last;
+  if (S.tab==='chunks'){
+    if (!S.chunks.length){ b.innerHTML = `<p class="empty">${esc(t('introOwn'))}</p>`; return; }
+    b.innerHTML = S.chunks.map(c => { const v = (c.emb ? c.emb.slice(0,6) : Array.from({length:6},(_,i)=>hash(c.id+i)*2-1)).map(x=>x.toFixed(2)).join(', ');
+      return `<div class="ck"><div class="m"><span>${c.id}</span><span>${esc(c.source)}</span><span>${c.text.length} chars · ~${Math.ceil(c.text.length/4)} tok</span></div><div class="v">embedding[384] = [${v}, …]</div><p>${esc(c.text)}</p></div>`; }).join('');
+    return;
+  }
+  if (!L){ b.innerHTML = `<p class="empty">${esc(t('empty'))}</p>`; return; }
+  const {res} = L;
+  if (S.tab==='ret'){
+    b.innerHTML = `<div class="hd"><span>id</span><span>${t('fin')}</span><span>${t('vec')}</span><span>${t('bm')}</span><span>rank</span></div>` +
+      res.retrieved.map((r,i) => { const s = r.scores, fin = s.final ?? s.rerank ?? s.fused*(L.p.hybrid?2.2:1), d = s.prev_rank - (i+1);
+        const arrow = L.p.rerank ? (d>0 ? `<span class="up">▲${d}</span>` : d<0 ? `<span class="dn">▼${-d}</span>` : '·') : '';
+        return `<div class="rr"><span>[${i+1}] ${r.id}</span><span class="bar"><i style="width:${pct(Math.min(1,fin))}"></i></span><span>${f2(s.vector)}</span><span>${f2(s.bm25)}</span><span>#${i+1} ${arrow}</span><div class="t">${esc(r.text)}</div></div>`; }).join('');
+  } else if (S.tab==='prompt'){
+    b.innerHTML = `<pre>${esc(res.prompt)}</pre>`;
+  } else {
+    const m = res.metrics, tm = m.timings, tot = Object.values(tm).reduce((a,b)=>a+b,0) || 1, ms = v => v==null ? '—' : Math.round(v) + ' ms';
+    b.innerHTML = [['embed','embed query'],['vector','vector search'],['bm25','keyword search'],['rerank','rerank'],['llm','LLM generate']].map(([k,l]) =>
+      `<div class="mt"><span>${l}</span><span class="bar"><i style="width:${pct(tm[k]/tot)}"></i></span><span>${ms(tm[k])}</span></div>`).join('') +
+      `<div class="kv"><div><b>${ms(m.total_ms ?? tot)}</b><span>${t('total')}</span></div><div><b>${ms(m.ttft_ms)}</b><span>${t('ttft')}</span></div><div><b>${ms(m.queue_ms)}</b><span>${t('queue')}</span></div>` +
+      `<div><b>${m.tokens_in}</b><span>${t('tin')}</span></div><div><b>${m.tokens_out}</b><span>${t('tout')}</span></div><div><b>$${m.cost_usd.toFixed(6)}</b><span>${t('cost')}</span></div>` +
+      `<div><b style="font-size:13px">${esc(m.model)}${m.cached ? ' ⚡' : ''}</b><span>${t('model')}</span></div></div>`;
+  }
+}
+
+/* ------------------------- API status (cold-start friendly) ------------------------- */
+async function loadKb(){
+  try { const r = await http('/v1/lab/kb/chunks'); if (r.chunks.length){ S.chunks = r.chunks; renderTab(); } }
+  catch(e){ console.warn('KB from API unavailable, using the local copy', e); }
+}
+async function checkApi(){
+  const el = $('apiState'), lab = el.querySelector('span');
+  if (CFG.MOCK){ lab.textContent = t('demoState'); return; }
+  lab.textContent = t('warming'); const t0 = Date.now();
+  try { await http('/health'); el.classList.add('ok'); lab.textContent = t('online'); if (S.src === 'kb') loadKb(); } catch { lab.textContent = 'offline · demo'; CFG.MOCK = true; }
+}
+
+/* ------------------------- wiring ------------------------- */
+document.querySelectorAll('#langSeg button').forEach(b => b.onclick = () => { applyLang(b.dataset.lang); $('apiState').querySelector('span').textContent = t(CFG.MOCK?'demoState':'online'); });
+document.querySelectorAll('#modeSeg button').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+document.querySelectorAll('.opt').forEach(o => o.onclick = () => setSrc(o.dataset.src));
+document.querySelectorAll('#tabs button').forEach(x => x.onclick = () => { S.tab = x.dataset.tab; renderTab(); });
+$('send').onclick = () => ask($('q').value);
+$('q').addEventListener('keydown', e => { if (e.key==='Enter') ask($('q').value); });
+$('file').onchange = e => e.target.files[0] && ingest(e.target.files[0]);
+$('sample').onclick = () => ingest(null);
+$('del').onclick = async () => { if (!CFG.MOCK) await realDelete(); track('lab_delete'); setSrc('own'); };
+const drop = $('drop');
+['dragover','dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => e.dataTransfer.files[0] && ingest(e.dataTransfer.files[0]));
+$('topk').oninput = e => $('topkO').textContent = e.target.value;
+$('chunkSz').oninput = e => $('chunkO').textContent = e.target.value;
+$('chunkSz').onchange = () => { if (S.src==='own' && S.docText){ S.chunks = chunkText(S.docText, +$('chunkSz').value); renderTab(); } };
+$('rerun').onclick = () => S.last && ask(S.last.q);
+
+const qs = new URLSearchParams(location.search);
+applyLang((navigator.language||'en').toLowerCase().startsWith('es') ? 'es' : 'en');
+if (qs.get('mode')==='technical') setMode('technical');
+if (qs.get('source')==='own') setSrc('own');
+checkApi();
+</script>
+</body>
+</html>
