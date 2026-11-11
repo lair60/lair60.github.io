@@ -2,989 +2,491 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Luis Inga Rivera — AI Engineer &amp; Full-Stack Developer</title>
-<!--/* Global site tag (gtag.js) - Google Analytics */-->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-12PJHL04XQ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
-
-  if (navigator.sendBeacon) {
-    gtag('config', 'G-12PJHL04XQ', {
-      transport_type: 'beacon'
-    });
-  } else {
-    gtag('config', 'G-12PJHL04XQ');
-  }
+  if (navigator.sendBeacon) { gtag('config', 'G-12PJHL04XQ', { transport_type: 'beacon' }); }
+  else { gtag('config', 'G-12PJHL04XQ'); }
 </script>
 <meta name="description" content="Luis Inga Rivera — AI Engineer and full-stack developer with 15+ years building production software: LLM orchestration, real-time streaming and RAG. UK Settled Status; available in Madrid or London.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Luis Inga Rivera — AI Engineer &amp; Full-Stack Developer">
 <meta property="og:description" content="15+ years building production software. LLM orchestration, real-time streaming, RAG. UK Settled Status; available immediately.">
+<meta name="theme-color" content="#0f1b2d">
+
+<!-- Librerías: Bootstrap 5 (rejilla, menú móvil, acordeón, scrollspy) e iconos Bootstrap Icons. Versiones fijadas. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
   :root{
-    --bg:#10141a;
-    --panel:#171d26;
-    --panel-alt:#1c2430;
-    --border:#2a3341;
-    --text:#e9edf2;
-    --text-dim:#8b96a5;
-    --text-dimmer:#4a5568;
-    --amber:#ffb454;
-    --cyan:#5ec8d8;
-    --green:#7bc67e;
-    --radius:10px;
-    --display: 'Space Grotesk', sans-serif;
-    --body: 'Inter', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
+    --ink:#15202b; --muted:#5b6773; --line:#e3e6ea; --canvas:#f4f5f7; --paper:#ffffff;
+    --navy:#0f1b2d; --navy-2:#17324d; --accent:#0b6e8a; --accent-ink:#095a72;
+    --amber:#ffb454; --amber-ink:#1a1204; --ok:#1a7f4b;
+    --serif:'Newsreader', Georgia, 'Times New Roman', serif;
+    --sans:'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --bs-body-font-family:var(--sans); --bs-body-color:var(--ink);
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--body);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    background-image:
-      radial-gradient(circle at 15% 0%, rgba(94,200,216,0.05), transparent 40%),
-      radial-gradient(circle at 85% 15%, rgba(255,180,84,0.04), transparent 45%);
-  }
-  a{color:inherit; text-decoration:none;}
-  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
-  ::selection{background:var(--amber); color:#10141a;}
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
-  }
+  html{scroll-behavior:smooth; scroll-padding-top:96px;}
+  body{font-family:var(--sans); color:var(--ink); background:var(--canvas); line-height:1.65; font-size:16px; -webkit-font-smoothing:antialiased;}
+  a{color:var(--accent); text-underline-offset:3px;} a:hover{color:var(--accent-ink);}
+  ::selection{background:var(--amber); color:var(--amber-ink);}
+  a:focus-visible, button:focus-visible, summary:focus-visible, .accordion-button:focus-visible{outline:3px solid var(--amber); outline-offset:2px; box-shadow:none;}
+  .skip-link{position:absolute; left:-999px; top:8px; background:var(--amber); color:var(--amber-ink); padding:8px 14px; border-radius:6px; z-index:2000; font-weight:700;}
+  .skip-link:focus{left:8px;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
 
-  /* ---------- NAV ---------- */
-  header.nav{
-    position:sticky; top:0; z-index:50;
-    background:rgba(16,20,26,0.85);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--border);
-  }
-  .nav-inner{
-    display:flex; align-items:center; justify-content:space-between; gap:16px;
-    padding:16px 28px; max-width:1080px; margin:0 auto;
-  }
-  .nav-id{
-    font-family:var(--mono); font-size:13px; color:var(--text-dim);
-    display:flex; align-items:center; gap:8px;
-  }
-  .dot-live{
-    width:7px; height:7px; border-radius:50%; background:var(--green);
-    box-shadow:0 0 0 0 rgba(123,198,126,0.6);
-    animation:pulse-dot 2s infinite;
-    flex-shrink:0;
-  }
-  @keyframes pulse-dot{
-    0%{box-shadow:0 0 0 0 rgba(123,198,126,0.5);}
-    70%{box-shadow:0 0 0 6px rgba(123,198,126,0);}
-    100%{box-shadow:0 0 0 0 rgba(123,198,126,0);}
-  }
-  .nav-links{display:flex; gap:28px; font-family:var(--mono); font-size:13px;}
-  .nav-links a{color:var(--text-dim); transition:color .15s;}
-  .nav-links a:hover{color:var(--cyan);}
-  .nav-right{display:flex; align-items:center; gap:14px;}
-  .lang-switch{
-    font-family:var(--mono); font-size:12px; color:var(--text-dim);
-    border:1px solid var(--border); border-radius:6px; overflow:hidden; display:flex;
-  }
-  .lang-switch button{
-    background:none; border:none; color:var(--text-dim); font-family:var(--mono);
-    font-size:12px; padding:6px 10px; cursor:pointer; transition:all .15s;
-  }
-  .lang-switch button.active{background:var(--amber); color:#10141a; font-weight:600;}
-  .lang-switch button:not(.active):hover{color:var(--cyan);}
-  .nav-cta{
-    font-family:var(--mono); font-size:12px; color:var(--bg); background:var(--amber);
-    padding:8px 14px; border-radius:6px; font-weight:600; white-space:nowrap;
-  }
-  @media (max-width:720px){
-    .nav-links{display:none;}
-  }
-  @media (max-width:480px){
-    .nav-inner{flex-wrap:wrap;}
-  }
+  /* ---------- barra superior (como en muchos temas de WordPress) ---------- */
+  .topbar{background:var(--navy); color:#c9d3de; font-size:13px;}
+  .topbar .container{display:flex; align-items:center; gap:18px; padding-top:7px; padding-bottom:7px; flex-wrap:wrap;}
+  .topbar a{color:#fff; text-decoration:none;} .topbar a:hover{color:var(--amber);}
+  .dot-live{display:inline-block; width:8px; height:8px; border-radius:50%; background:#5fd38d; margin-right:8px; box-shadow:0 0 0 0 rgba(95,211,141,.6); animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,211,141,.5)}70%{box-shadow:0 0 0 7px rgba(95,211,141,0)}100%{box-shadow:0 0 0 0 rgba(95,211,141,0)}}
+  .topbar .spacer{flex:1;}
+  .lang-switch{display:inline-flex; border:1px solid rgba(255,255,255,.28); border-radius:6px; overflow:hidden;}
+  .lang-switch button{background:none; border:0; color:#c9d3de; font:600 12px var(--sans); padding:4px 11px; cursor:pointer;}
+  .lang-switch button.active{background:var(--amber); color:var(--amber-ink);}
+  .lang-switch button:not(.active):hover{color:#fff;}
+  @media (max-width:640px){ .topbar .hide-sm{display:none;} }
 
-  /* ---------- HERO ---------- */
-  .hero{padding:88px 0 64px; position:relative; overflow:hidden;}
-  .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center;}
-  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr;} }
-  .eyebrow{
-    font-family:var(--mono); font-size:13px; letter-spacing:0.02em;
-    color:var(--cyan); margin-bottom:18px; display:flex; align-items:center; gap:10px;
-  }
-  .eyebrow::before{content:''; width:24px; height:1px; background:var(--cyan);}
-  h1{
-    font-family:var(--display); font-weight:700; font-size:clamp(38px,6vw,58px);
-    line-height:1.05; letter-spacing:-0.01em; margin-bottom:16px;
-  }
-  .hero-role{
-    font-family:var(--display); font-size:20px; color:var(--text-dim); font-weight:500; margin-bottom:22px;
-  }
-  .hero-desc{color:var(--text-dim); font-size:16px; max-width:54ch; margin-bottom:24px;}
-  .status-line{
-    font-family:var(--mono); font-size:13px; color:var(--text);
-    background:var(--panel); border:1px solid var(--border); border-radius:8px;
-    padding:12px 16px; margin-bottom:30px; display:inline-flex; align-items:center; gap:10px;
-    max-width:100%;
-  }
-  .status-line b{color:var(--amber); font-weight:600;}
-  .cta-row{display:flex; flex-wrap:wrap; gap:12px;}
-  .btn{
-    font-family:var(--mono); font-size:13px; padding:12px 18px; border-radius:8px;
-    display:inline-flex; align-items:center; gap:8px; transition:all .15s; border:1px solid transparent;
-  }
-  .btn-primary{background:var(--amber); color:#10141a; font-weight:600;}
-  .btn-primary:hover{background:#ffc575;}
-  .btn-ghost{border-color:var(--border); color:var(--text);}
-  .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+  /* ---------- cabecera ---------- */
+  .site-header{background:var(--paper); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:1030; transition:box-shadow .2s;}
+  .site-header.scrolled{box-shadow:0 4px 18px rgba(15,27,45,.08);}
+  .site-header .navbar{padding:12px 0;}
+  .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink);}
+  .brand:hover{color:var(--ink);}
+  .brand-mark{width:44px; height:44px; border-radius:7px; background:var(--navy); color:var(--amber); display:grid; place-items:center; font:700 21px var(--serif); letter-spacing:-.02em;}
+  .brand-title{font:700 22px/1.1 var(--serif); letter-spacing:-.01em;}
+  .brand-tag{font-size:12.5px; color:var(--muted); line-height:1.3;}
+  .navbar-nav .nav-link{font-weight:600; font-size:15px; color:var(--ink); padding:.55rem .95rem; text-transform:capitalize; border-radius:6px;}
+  .navbar-nav .nav-link:hover{color:var(--accent);}
+  .navbar-nav .nav-link.active{color:var(--accent); box-shadow:inset 0 -3px 0 var(--accent); border-radius:0;}
+  .nav-link.is-new::after{content:'new'; font-size:10px; font-weight:700; color:#fff; background:var(--accent); border-radius:99px; padding:1px 7px; margin-left:7px; vertical-align:2px; text-transform:none;}
+  .navbar-toggler{border-color:var(--line);} .navbar-toggler:focus{box-shadow:0 0 0 3px rgba(255,180,84,.6);}
+  .btn-amber{background:var(--amber); color:var(--amber-ink); font-weight:700; border:0; border-radius:6px; padding:.65rem 1.2rem;}
+  .btn-amber:hover{background:#ffc26e; color:var(--amber-ink);}
+  .btn-ghost-light{color:#fff; border:1px solid rgba(255,255,255,.45); font-weight:600; border-radius:6px; padding:.65rem 1.2rem; background:rgba(255,255,255,.04);}
+  .btn-ghost-light:hover{background:rgba(255,255,255,.14); color:#fff; border-color:#fff;}
+  .btn-outline-accent{color:var(--accent); border:1px solid var(--accent); font-weight:700; border-radius:6px; padding:.6rem 1.1rem; background:transparent;}
+  .btn-outline-accent:hover{background:var(--accent); color:#fff;}
 
-  /* ---------- PIPELINE DIAGRAM (signature element) ---------- */
-  .diagram-card{
-    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
-    padding:18px; position:relative;
-  }
-  .diagram-label{
-    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
-    margin-bottom:10px; display:flex; justify-content:space-between;
-  }
-  .diagram-label span:last-child{color:var(--green);}
-  svg.pipeline{width:100%; height:auto; display:block;}
-  .node-box{fill:var(--panel-alt); stroke:var(--border); stroke-width:1;}
-  .node-text{font-family:var(--mono); font-size:9.5px; fill:var(--text); text-anchor:middle;}
-  .node-sub{font-family:var(--mono); font-size:7.5px; fill:var(--text-dim); text-anchor:middle;}
-  .flow-line{fill:none; stroke:var(--border); stroke-width:1.4;}
-  .packet-req{fill:var(--cyan);}
-  .packet-res{fill:var(--amber);}
+  /* ---------- portada (bloque "cover") ---------- */
+  .cover{background:radial-gradient(1100px 520px at 88% -10%, rgba(255,180,84,.20), transparent 62%), linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color:#fff; padding:76px 0 88px;}
+  .cover h1{font:700 clamp(46px,6.4vw,76px)/1 var(--serif); letter-spacing:-.025em; margin:0 0 14px;}
+  .cover .subtitle{font:italic 600 clamp(21px,2.5vw,28px)/1.3 var(--serif); color:#ffd9a3; margin-bottom:20px;}
+  .cover .lead{color:#d5dde6; font-size:18.5px; max-width:32em; margin-bottom:26px;}
+  .chips{list-style:none; padding:0; margin:0 0 26px; display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{display:inline-flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,.24); border-radius:999px; padding:6px 14px; font-size:13.5px; color:#fff; background:rgba(255,255,255,.06);}
+  .chip.key{border-color:rgba(120,224,165,.6); background:rgba(120,224,165,.12); color:#c9f5dc;}
+  .cover .recent{font-size:14px; color:#aebccb; margin:0 0 28px; max-width:42em;}
+  .cover .recent b{color:#fff;}
+  .featured-card{background:var(--paper); color:var(--ink); border-radius:10px; padding:26px; box-shadow:0 28px 70px rgba(0,0,0,.34);}
+  .featured-card .kicker{display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); font-weight:600;}
+  .badge-live{background:#e3f6ec; color:var(--ok); border-radius:99px; padding:2px 10px; font-size:12px; font-weight:700;}
+  .featured-card h2{font:700 30px/1.15 var(--serif); margin:10px 0 12px; letter-spacing:-.01em;}
+  .chat{display:grid; gap:10px; margin:14px 0 16px; font-size:14.5px;}
+  .chat .q{justify-self:end; background:#eef1f4; border-radius:12px 12px 2px 12px; padding:8px 13px; max-width:88%;}
+  .chat .a{border-left:3px solid var(--amber); padding:2px 0 2px 13px;}
+  .cite{display:inline-block; font-size:11px; font-weight:700; color:var(--accent); border:1px solid var(--line); border-radius:4px; padding:0 5px; margin-left:3px;}
+  .score{display:grid; grid-template-columns:34px 1fr 38px; gap:10px; align-items:center; font-size:12px; color:var(--muted); font-weight:600;}
+  .score .bar{height:6px; background:#eef1f4; border-radius:4px; overflow:hidden;} .score .bar i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--amber));}
 
-  /* ---------- SECTIONS ---------- */
-  section{padding:70px 0; border-top:1px solid var(--border);}
-  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:38px; flex-wrap:wrap;}
-  .sec-num{font-family:var(--mono); font-size:12px; color:#4a5568;}
-  .sec-title{font-family:var(--display); font-size:28px; font-weight:600;}
-  .sec-sub{font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-left:auto;}
-  @media (max-width:600px){ .sec-sub{margin-left:0;} }
+  /* ---------- contenido ---------- */
+  .content{padding:60px 0 76px;}
+  .wp-card{background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:30px 32px;}
+  .wp-card + .wp-card, .stack > * + *{margin-top:24px;}
+  .sec-title{font:700 clamp(28px,3.4vw,34px)/1.15 var(--serif); letter-spacing:-.01em; margin:0 0 22px;}
+  .sec-title::after{content:""; display:block; width:54px; height:4px; background:var(--amber); border-radius:2px; margin-top:12px;}
+  .sec-title .sub{font:500 14px var(--sans); color:var(--muted); letter-spacing:0; margin-left:10px;}
+  .prose{font-size:17px; color:#2b3742; max-width:62ch;}
 
-  /* NOW section */
-  .now-card{
-    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:30px;
-  }
-  .now-top{display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:18px;}
-  .now-title{font-family:var(--display); font-size:22px; font-weight:600; margin-bottom:6px;}
-  .now-dates{font-family:var(--mono); font-size:12px; color:var(--amber);}
-  .now-links{display:flex; gap:14px; font-family:var(--mono); font-size:12px; flex-wrap:wrap;}
-  .now-links a{color:var(--text-dim); border-bottom:1px dotted var(--border);}
-  .now-links a:hover{color:var(--cyan); border-color:var(--cyan);}
-  .now-feats{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:26px 0;}
-  @media (max-width:700px){ .now-feats{grid-template-columns:1fr;} }
-  .feat{background:var(--panel-alt); border:1px solid var(--border); border-radius:8px; padding:16px;}
-  .feat h4{font-family:var(--display); font-size:15px; font-weight:600; color:var(--cyan); margin-bottom:8px;}
-  .feat p{font-size:14px; color:var(--text-dim); line-height:1.55;}
-  .pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px;}
-  .pill{
-    font-family:var(--mono); font-size:11px; color:var(--text-dim);
-    border:1px solid var(--border); border-radius:99px; padding:5px 11px;
-  }
+  .post-title{font:700 26px/1.2 var(--serif); letter-spacing:-.01em; margin:0 0 8px;}
+  .post-meta{display:flex; flex-wrap:wrap; gap:6px 20px; font-size:13.5px; color:var(--muted); margin-bottom:16px;}
+  .post-meta i{color:var(--accent); margin-right:6px;}
+  .post.featured{border-top:4px solid var(--amber);}
+  .post-desc{font-size:16.5px; color:#2b3742; max-width:66ch; margin-bottom:6px;}
+  .block{display:flex; gap:14px; padding:16px 18px; border:1px solid var(--line); border-radius:8px; background:#fafbfc; height:100%;}
+  .block > i{font-size:22px; color:var(--accent); line-height:1.2; flex:none;}
+  .block h4{font:700 16px var(--sans); margin:0 0 4px;} .block p{font-size:14.5px; color:var(--muted); margin:0; line-height:1.55;}
+  .tags{margin-top:18px;}
+  .tag{display:inline-block; font-size:12.5px; font-weight:600; padding:3px 10px; border-radius:4px; background:#eef1f4; color:#33424f; margin:0 6px 8px 0;}
+  .tag.model{background:#e1f3f8; color:var(--accent-ink);}
+  .notice{display:inline-flex; gap:8px; align-items:center; background:#e9f6ef; color:#14633a; border:1px solid #bfe3cf; border-radius:6px; padding:6px 12px; font-size:13.5px; font-weight:600; margin-bottom:14px;}
+  .post ul.bul{padding-left:1.15rem; margin:0 0 6px; color:#2b3742; font-size:15.5px;} .post ul.bul li{margin-bottom:6px;} .post ul.bul li::marker{color:var(--accent);}
+  #log{margin-top:48px;}
+  .lab-link{display:inline-block; font-weight:700; font-size:14.5px; margin:6px 0 4px;}
 
-  /* LOG (experience) */
-  .log-entry{
-    display:grid; grid-template-columns:150px 1fr; gap:24px; padding:26px 0; border-bottom:1px solid var(--border);
-  }
-  .log-entry:last-child{border-bottom:none;}
-  @media (max-width:640px){ .log-entry{grid-template-columns:1fr; gap:8px;} }
-  .log-date{font-family:var(--mono); font-size:12px; color:var(--text-dim); padding-top:2px;}
-  .log-company{font-family:var(--display); font-size:18px; font-weight:600; margin-bottom:2px;}
-  .log-company .loc{color:var(--text-dim); font-weight:400; font-size:14px;}
-  .log-role{font-family:var(--mono); font-size:12px; color:var(--text-dim); margin-bottom:12px;}
-  .log-entry ul{padding-left:18px; color:var(--text-dim); font-size:14px; margin-bottom:12px;}
-  .log-entry li{margin-bottom:5px;}
-  .log-entry li::marker{color:var(--cyan);}
-  .callout{
-    display:inline-block; font-family:var(--mono); font-size:11.5px; color:var(--green);
-    border:1px solid rgba(123,198,126,0.35); background:rgba(123,198,126,0.06);
-    border-radius:6px; padding:5px 10px; margin-bottom:12px;
-  }
-  details.earlier{margin-top:8px;}
-  details.earlier > summary{
-    cursor:pointer; font-family:var(--mono); font-size:12.5px; color:var(--cyan);
-    list-style:none; display:flex; align-items:center; gap:8px; padding:8px 0;
-  }
-  details.earlier > summary::-webkit-details-marker{display:none;}
-  details.earlier > summary::before{content:'+'; border:1px solid var(--border); border-radius:4px; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:12px;}
-  details.earlier[open] > summary::before{content:'–';}
-  .earlier-entry{padding:16px 0 16px 24px; border-left:1px solid var(--border); margin-left:8px;}
-  .earlier-entry .log-date{display:inline; margin-right:10px;}
-  .earlier-entry .log-company{display:inline; font-size:15px;}
-  .earlier-entry p{color:var(--text-dim); font-size:13.5px; margin-top:6px;}
+  .accordion{--bs-accordion-border-color:var(--line); --bs-accordion-btn-focus-box-shadow:none; --bs-accordion-active-bg:#eef7fa; --bs-accordion-active-color:var(--accent-ink);}
+  .accordion-button{font-weight:700;}
+  .earlier-item{padding:14px 0; border-bottom:1px solid var(--line);} .earlier-item:last-child{border-bottom:0;}
+  .earlier-item .when{font-size:13px; color:var(--muted); font-weight:600;} .earlier-item .who{font-weight:800; margin-left:8px;}
+  .earlier-item p{margin:4px 0 0; font-size:15px; color:#2b3742;}
 
-  /* STACK */
-  .stack-layers{display:flex; flex-direction:column; gap:2px;}
-  .layer{
-    background:var(--panel); border:1px solid var(--border); border-radius:8px;
-    padding:18px 22px; display:grid; grid-template-columns:170px 1fr; gap:16px; align-items:center;
-  }
-  @media (max-width:640px){ .layer{grid-template-columns:1fr; gap:10px;} }
-  .layer + .layer{margin-top:10px;}
-  .layer-name{font-family:var(--mono); font-size:12.5px; color:var(--text-dim);}
-  .layer-name::after{content:''; display:block; width:26px; height:2px; background:var(--cyan); margin-top:8px;}   /* antes era un <span> que la traducción borraba */
-  .layer-items{display:flex; flex-wrap:wrap; gap:8px;}
-  .layer-items .pill{color:var(--text);}
+  .skill-group h3{font:700 19px var(--serif); margin:0 0 12px; display:flex; align-items:center; gap:10px;}
+  .skill-group h3 i{color:var(--accent); font-size:20px;}
 
-  .certs{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:30px;}
-  @media (max-width:640px){ .certs{grid-template-columns:1fr;} }
-  .cert{background:var(--panel-alt); border:1px solid var(--border); border-radius:8px; padding:16px 18px;}
-  .cert .cname{font-family:var(--display); font-size:15px; font-weight:600; margin-bottom:4px;}
-  .cert .cmeta{font-family:var(--mono); font-size:11.5px; color:var(--text-dim);}
+  /* ---------- barra lateral (widgets) ---------- */
+  .widget{background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:22px 24px; margin-bottom:24px;}
+  .widget-title{font:700 20px var(--serif); padding-bottom:10px; margin:0 0 14px; border-bottom:2px solid var(--ink); letter-spacing:-.005em;}
+  .widget ul{list-style:none; padding:0; margin:0;}
+  .widget li{display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); font-size:15px; line-height:1.45; align-items:flex-start;}
+  .widget li:last-child{border-bottom:0; padding-bottom:0;} .widget li:first-child{padding-top:0;}
+  .widget li > i{color:var(--accent); font-size:18px; line-height:1.3; flex:none;}
+  .widget small{display:block; color:var(--muted); font-size:12.5px;}
+  .widget a{font-weight:600;}
+  .widget .ok > i{color:var(--ok);}
+  .sticky-widgets{position:sticky; top:96px;}
+  .site-footer .cap a{text-transform:capitalize;}
 
-  /* CONTACT / FOOTER */
-  footer{padding:60px 0 40px; border-top:1px solid var(--border);}
-  .foot-grid{display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap;}
-  .foot-title{font-family:var(--display); font-size:26px; font-weight:600; max-width:20ch; margin-bottom:10px;}
-  .foot-desc{color:var(--text-dim); font-size:14px; max-width:40ch; margin-bottom:22px;}
-  .foot-links{display:flex; flex-direction:column; gap:10px; font-family:var(--mono); font-size:13.5px;}
-  .foot-links a{color:var(--text); border-bottom:1px solid transparent;}
-  .foot-links a:hover{color:var(--cyan); border-color:var(--cyan);}
-  .copyright{
-    font-family:var(--mono); font-size:11px; color:#4a5568;
-    margin-top:50px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
-  }
-
-  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
-  .reveal.in{opacity:1; transform:translateY(0);}
-
-  /* ---------- AI LAB (teaser + entry points) ---------- */
-  .nav-links a.is-new::after{content:'new'; font-size:9px; color:var(--bg); background:var(--cyan); border-radius:99px; padding:1px 6px; margin-left:6px; vertical-align:2px; font-weight:600;}
-  .btn-lab{border-color:var(--cyan); color:var(--cyan); background:rgba(94,200,216,0.07);}
-  .btn-lab:hover{background:rgba(94,200,216,0.16);}
-  .lab-teaser{display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:center;}
-  @media (max-width:860px){ .lab-teaser{grid-template-columns:1fr;} }
-  .lab-lead{color:var(--text-dim); font-size:16px; max-width:52ch; margin-bottom:18px;}
-  .lab-steps{list-style:none; margin-bottom:26px; display:grid; gap:8px; font-family:var(--mono); font-size:13px;}
-  .lab-steps li::before{content:'›'; color:var(--cyan); margin-right:10px;}
-  .lab-preview{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px; font-size:13px; display:grid; gap:10px;}
-  .lp-bar{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--text-dim);}
-  .lp-bar span:last-child{color:var(--green);}
-  .lp-q{justify-self:end; background:var(--panel-alt); border:1px solid var(--border); border-radius:10px 10px 2px 10px; padding:8px 12px; max-width:85%;}
-  .lp-a{border-left:2px solid var(--amber); padding:2px 0 2px 12px; color:var(--text);}
-  .lp-cite{font-family:var(--mono); font-size:10px; color:var(--cyan); border:1px solid var(--border); border-radius:4px; padding:0 5px; margin-left:3px;}
-  .lp-row{display:grid; grid-template-columns:34px 1fr 38px; gap:8px; align-items:center; font-family:var(--mono); font-size:11px; color:var(--text-dim);}
-  .lp-track{height:5px; background:var(--panel-alt); border-radius:3px; overflow:hidden;}
-  .lp-track i{display:block; height:100%; background:linear-gradient(90deg,var(--cyan),var(--amber));}
-  .lab-link{display:inline-block; margin:14px 0 4px; font-family:var(--mono); font-size:12.5px; color:var(--cyan);}
-  .lab-link:hover{text-decoration:underline;}
-
-  /* ---------- CV-aligned additions ---------- */
-  .facts{list-style:none; display:flex; flex-wrap:wrap; gap:8px; margin:0 0 26px;}
-  .fact{font-family:var(--mono); font-size:12px; color:var(--text); border:1px solid var(--border); border-radius:99px; padding:6px 13px;}
-  .fact.key{color:var(--green); border-color:rgba(123,198,126,0.45); background:rgba(123,198,126,0.06);}
-  .log-entry.featured{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:30px; margin-bottom:14px;}
-  .log-desc{color:var(--text-dim); font-size:15px; max-width:68ch; margin-bottom:6px;}
-  .log-entry.featured .now-feats{margin:22px 0 4px;}
-  .layer-items .pill.model{border-color:rgba(94,200,216,0.4); color:var(--cyan);}
-  a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid var(--cyan); outline-offset:3px; border-radius:4px;}
-  .cert .cname .foot-links{font-family:var(--display); font-size:15px; font-weight:600; gap:0;}
-  footer .foot-title{max-width:26ch;}
-
-  /* Corrección de especificidad: ".wrap" (padding:0 28px) ganaba a "section" y "footer" y se imponía a ".hero" así que no había espacio
-     vertical entre secciones y, en móvil, el hero no tenía margen lateral. Estas reglas más específicas lo restablecen. */
-  section.wrap{padding-top:76px; padding-bottom:76px;}
-  .hero.wrap{padding:88px 28px 64px;}
-  footer.wrap{padding-top:64px; padding-bottom:44px;}
-  @media (max-width:640px){ section.wrap{padding-top:56px; padding-bottom:56px;} .hero.wrap{padding-top:56px;} }
+  /* ---------- pie ---------- */
+  .site-footer{background:var(--navy); color:#b9c4cf; padding:60px 0 26px;}
+  .site-footer h3{font:700 20px var(--serif); color:#fff; margin-bottom:14px;}
+  .site-footer a{color:#e8eef5; text-decoration:none;} .site-footer a:hover{color:var(--amber);}
+  .site-footer ul{list-style:none; padding:0; margin:0;} .site-footer li{padding:4px 0;}
+  .foot-lead{font:700 clamp(24px,3vw,30px)/1.2 var(--serif); color:#fff; margin-bottom:12px; max-width:20ch;}
+  .site-footer .copy{border-top:1px solid rgba(255,255,255,.12); margin-top:40px; padding-top:20px; font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  .to-top{position:fixed; right:22px; bottom:22px; width:46px; height:46px; border-radius:50%; border:0; background:var(--navy); color:#fff; display:grid; place-items:center; font-size:20px; box-shadow:0 8px 22px rgba(0,0,0,.25); opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; transform:translateY(8px); z-index:1040;}
+  .to-top.show{opacity:1; pointer-events:auto; transform:none;} .to-top:hover{background:var(--accent);}
 </style>
 </head>
-<body>
+<body data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-root-margin="-15% 0px -70% 0px" data-bs-smooth-scroll="true" tabindex="0">
+<a class="skip-link" href="#content">Skip to content</a>
 
-<header class="nav">
-  <div class="nav-inner">
-    <div class="nav-id"><span class="dot-live" aria-hidden="true"></span> lair60 — <span data-i18n="navAvail">available for new roles</span></div>
-    <nav class="nav-links" aria-label="Primary">
-      <!--<a href="#now" data-i18n="navNow">now</a>-->
-      <a href="lab/" class="is-new" data-i18n="navLab">lab</a>
-      <a href="#log" data-i18n="navLog">log</a>
-      <a href="#stack" data-i18n="navStack">stack</a>
-      <a href="#contact" data-i18n="navContact">contact</a>
-    </nav>
-    <div class="nav-right">
-      <div class="lang-switch" role="group" aria-label="Language">
-        <button type="button" data-lang="en" class="active">EN</button>
-        <button type="button" data-lang="es">ES</button>
-      </div>
-      <a class="nav-cta" href="mailto:lair60@yahoo.es" data-i18n="navEmail">Email me</a>
+<div class="topbar">
+  <div class="container">
+    <span><span class="dot-live" aria-hidden="true"></span><span data-i18n="navAvail">available for new roles</span></span>
+    <span class="spacer"></span>
+    <a class="hide-sm" href="mailto:lair60@yahoo.es"><i class="bi bi-envelope me-1"></i>lair60@yahoo.es</a>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="en" class="active">EN</button>
+      <button type="button" data-lang="es">ES</button>
     </div>
   </div>
+</div>
+
+<header class="site-header">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="brand" href="#top" aria-label="Luis Inga Rivera">
+        <span class="brand-mark" aria-hidden="true">LI</span>
+        <span><span class="brand-title d-block">Luis Inga Rivera</span><span class="brand-tag d-block" data-i18n="heroEyebrow">AI Engineer · Full-Stack Developer</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+        <ul class="navbar-nav align-items-lg-center gap-lg-1 mt-3 mt-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#about" data-i18n="navAbout">about</a></li>
+          <li class="nav-item"><a class="nav-link is-new" href="lab/" data-i18n="navLab">lab</a></li>
+          <li class="nav-item"><a class="nav-link" href="#log" data-i18n="navLog">experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#stack" data-i18n="navStack">skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact" data-i18n="navContact">contact</a></li>
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0"><a class="btn btn-amber nav-cta" href="mailto:lair60@yahoo.es" data-i18n="navEmail">Email me</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </header>
 
-<main>
-  <section class="hero wrap">
-    <div class="hero-grid">
-      <div>
-        <div class="eyebrow" data-i18n="heroEyebrow">AI Engineer · Full-Stack Developer</div>
-        <h1>Luis Inga<br>Rivera</h1>
-        <p class="hero-role" data-i18n="heroRole">15+ years building and operating production software. Lately: AI products, end to end.</p>
-        <p class="hero-desc" data-i18n="heroDesc">I design LLM-powered systems — multi-model orchestration, real-time streaming, document understanding and retrieval-augmented generation — and take them from architecture to cloud deployment. AWS Certified Generative AI Developer and DevOps Engineer (Professional).</p>
-        <ul class="facts">
-          <li class="fact key" data-i18n="factRight">UK Settled Status — no sponsorship needed</li>
-          <li class="fact key" data-i18n="factAvail">Available immediately</li>
-          <li class="fact" data-i18n="factLoc">Madrid · London</li>
-          <li class="fact" data-i18n="factLang">English (Professional) · Spanish (Native)</li>
-        </ul>
-        <div class="status-line">
-          <span class="dot-live" aria-hidden="true"></span>
-          <span data-i18n="heroStatus">most recent: <b>Zinga Education</b> — FastAPI · Celery · Redis · real-time WebSockets · Gemini / OpenAI / DeepSeek</span>
-        </div>
-        <div class="cta-row">
-          <a class="btn btn-primary" href="mailto:lair60@yahoo.es" data-i18n="ctaEmail">Email me →</a>
-          <!--
-            CV DOWNLOAD FILE:
-            This button points to "Luis_Inga_Rivera_CV.pdf", a relative path.
-            Upload the PDF file with that exact name to the ROOT of your
-            lair60.github.io repo (same folder as this index.html) and the
-            button will work as-is. A ready-to-use copy of your current CV
-            with that filename is included alongside this file.
-          -->
-          <a id="cvLink" class="btn btn-ghost" href="Luis_Inga_Rivera_CV.pdf" target="_blank" download data-i18n="ctaCV">Download CV ↓</a>
-          <a class="btn btn-lab" href="lab/" data-i18n="ctaLab">Try the AI Lab →</a>
-          <a class="btn btn-ghost" href="#log" data-i18n="ctaLog">Experience ↓</a>
-        </div>
-      </div>
-
-      <div class="diagram-card" aria-hidden="true">
-        <div class="diagram-label"><span data-i18n="diagLabel">Zinga Education — request pipeline</span><span data-i18n="diagLive">● live</span></div>
-        <svg class="pipeline" viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg">
-          <path id="p1" class="flow-line" d="M55,40 L55,90"/>
-          <path id="p2" class="flow-line" d="M55,110 L55,150 Q55,160 65,160 L110,160"/>
-          <path id="p3" class="flow-line" d="M170,160 L215,160"/>
-          <path id="p4" class="flow-line" d="M275,145 L275,60 Q275,50 265,50 L120,50"/>
-          <path id="p5" class="flow-line" d="M60,50 Q40,50 40,65 L40,90"/>
-          <path id="p6" class="flow-line" d="M55,110 L55,220 Q55,230 65,230 L110,230"/>
-
-          <rect class="node-box" x="15" y="10" width="80" height="30" rx="6"/>
-          <text class="node-text" x="55" y="26">Client</text>
-          <text class="node-sub" x="55" y="35" data-i18n="diagClientSub">iOS · Android · Web</text>
-
-          <rect class="node-box" x="15" y="90" width="80" height="30" rx="6"/>
-          <text class="node-text" x="55" y="106">WebSocket GW</text>
-          <text class="node-sub" x="55" y="115" data-i18n="diagWsSub">real-time stream</text>
-
-          <rect class="node-box" x="110" y="145" width="60" height="30" rx="6"/>
-          <text class="node-text" x="140" y="161">FastAPI</text>
-          <text class="node-sub" x="140" y="170">+ Celery</text>
-
-          <rect class="node-box" x="215" y="145" width="60" height="30" rx="6"/>
-          <text class="node-text" x="245" y="161">Redis</text>
-          <text class="node-sub" x="245" y="170" data-i18n="diagRedisSub">broker · pub/sub</text>
-
-          <rect class="node-box" x="120" y="35" width="145" height="30" rx="6"/>
-          <text class="node-text" x="192" y="51">Gemini · OpenAI · DeepSeek</text>
-          <text class="node-sub" x="192" y="60" data-i18n="diagAiSub">document AI · tutoring</text>
-
-          <rect class="node-box" x="110" y="215" width="60" height="30" rx="6"/>
-          <text class="node-text" x="140" y="231" data-i18n="diagStorage">Storage</text>
-          <text class="node-sub" x="140" y="240">OCI objects</text>
-
-          <circle r="3" class="packet-req">
-            <animateMotion dur="2.6s" repeatCount="indefinite" path="M55,40 L55,90 L55,150 Q55,160 65,160 L215,160"/>
-          </circle>
-          <circle r="3" class="packet-res">
-            <animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite" path="M215,160 L192,160 L192,65 L192,50 L55,50 L55,90 L55,40"/>
-          </circle>
-          <circle r="2.6" class="packet-req">
-            <animateMotion dur="3.4s" begin="0.6s" repeatCount="indefinite" path="M55,110 L55,220 Q55,230 65,230 L140,230 L140,175"/>
-          </circle>
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <!-- AI LAB TEASER -->
-  <section id="lab" class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">01</span>
-      <h2 class="sec-title" data-i18n="secLab">AI Engineering Lab</h2>
-      <span class="sec-sub" data-i18n="labSub">live demo · RAG</span>
-    </div>
-    <div class="lab-teaser reveal">
-      <div>
-        <p class="lab-lead" data-i18n="labLead">Don't take my word for it: a working retrieval-augmented system you can test. Ask about my experience or upload your own document. It uses hybrid retrieval and a self-hosted model, and Technical mode shows what happens under the hood.</p>
-        <ul class="lab-steps">
-          <li data-i18n="labS1">Explore my experience — no upload needed</li>
-          <li data-i18n="labS2">Or upload a PDF, e.g. a job description</li>
-          <li data-i18n="labS3">Switch to Technical mode to see chunks, scores and prompts</li>
-        </ul>
-        <div class="cta-row">
-          <a id="labCta" class="btn btn-primary" href="lab/" data-i18n="labCta">Open the Lab →</a>
-          <a id="labCtaTech" class="btn btn-ghost" href="lab/?mode=technical" data-i18n="labCtaTech">See the internals ↗</a>
-        </div>
-      </div>
-      <div class="lab-preview" aria-hidden="true">
-        <div class="lp-bar"><span>ai lab — preview</span><span>● grounded</span></div>
-        <div class="lp-q">Which AI models does he orchestrate?</div>
-        <div class="lp-a">Gemini, OpenAI and DeepSeek, routed by a unified backend with token throttling. <span class="lp-cite">1</span><span class="lp-cite">2</span></div>
-        <div class="lp-row"><span>c-05</span><span class="lp-track"><i style="width:92%"></i></span><span>0.92</span></div>
-        <div class="lp-row"><span>c-02</span><span class="lp-track"><i style="width:64%"></i></span><span>0.64</span></div>
-        <div class="lp-row"><span>c-03</span><span class="lp-track"><i style="width:41%"></i></span><span>0.41</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NOW -->
-  <!--<section id="now" class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">01</span>
-      <h2 class="sec-title" data-i18n="secNow">Now</h2>
-      <span class="sec-sub" data-i18n="secNowSub">03/2025 — 08/2026</span>
-    </div>
-
-    <div class="now-card reveal">
-      <div class="now-top">
-        <div>
-          <div class="now-title" data-i18n="nowTitle">Full Stack Developer — AI Learning Assistant</div>
-          <div class="now-dates">Test-me.app</div>
-        </div>
-        <div class="now-links">
-          <a href="https://www.test-me.app" target="_blank" rel="noopener" data-i18n="nowLinkWeb">Website ↗</a>
-          <a id="android-link" href="https://play.google.com/store/apps/details?id=com.testme.zingaeducation" target="_blank" rel="noopener">Google Play ↗</a>
-          <a id="ios-link" href="https://apps.apple.com/es/app/test-me-app-estudia-con-ia/id6761847855" target="_blank" rel="noopener">App Store ↗</a>
-        </div>
-      </div>
-
-      <p style="color:var(--text-dim); font-size:14.5px; max-width:70ch;" data-i18n="nowDesc">
-        Designed and built the product's backend and cross-platform client from scratch: an async pipeline that turns uploaded documents into quizzes and real-time tutoring, streamed live to iOS, Android and web from a single codebase.
-      </p>
-
-      <div class="now-feats">
-        <div class="feat">
-          <h4 data-i18n="feat1h">Async backend</h4>
-          <p data-i18n="feat1p">FastAPI + Celery, with Redis as broker and backend, processing long-running text extraction and AI calls off the request path — retries, timeouts, exponential backoff.</p>
-        </div>
-        <div class="feat">
-          <h4 data-i18n="feat2h">Real-time streaming</h4>
-          <p data-i18n="feat2p">Native WebSockets stream AI response chunks live, with Redis Pub/Sub message recovery and automatic reconnection — consistent behaviour across iOS, Android and web.</p>
-        </div>
-        <div class="feat">
-          <h4 data-i18n="feat3h">Multi-AI orchestration</h4>
-          <p data-i18n="feat3p">Unified backend routing across Gemini, OpenAI and DeepSeek for document understanding, quiz generation and real-time math tutoring, with throttling for cost-efficient token use.</p>
-        </div>
-        <div class="feat">
-          <h4 data-i18n="feat4h">Cross-platform + payments</h4>
-          <p data-i18n="feat4p">Single Expo codebase for web, iOS and Android, with authentication and a full payment system across Stripe (web) and native IAP (mobile).</p>
-        </div>
-      </div>
-
-      <div class="pills">
-        <span class="pill">FastAPI</span><span class="pill">Celery</span><span class="pill">Redis</span>
-        <span class="pill">WebSockets</span><span class="pill">Gemini</span><span class="pill">OpenAI</span>
-        <span class="pill">DeepSeek</span><span class="pill">OCI (LB, Object Storage)</span><span class="pill">MongoDB</span>
-        <span class="pill">React Native (Expo)</span><span class="pill">Supabase</span><span class="pill">Stripe</span>
-        <span class="pill">GA4</span><span class="pill">Expo IAP</span>
-      </div>
-    </div>
-  </section>-->
-
-  <!-- LOG -->
-  <section id="log" class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">02</span>
-      <h2 class="sec-title" data-i18n="secLog">Experience</h2>
-      <span class="sec-sub">2007 — 2026</span>
-    </div>
-
-    <div class="reveal">
-      <div class="log-entry featured">
-        <div class="log-date">03/2025 — 09/2026</div>
-        <div>
-          <div class="log-company">Zinga Education <span class="loc">S.L.</span></div>
-          <div class="log-role" data-i18n="zingaRole">Full Stack Developer (AI Engineering)</div>
-          <p class="log-desc" data-i18n="zingaDesc">AI-powered learning platform for web, iOS and Android: document understanding, quiz generation and real-time tutoring with multiple LLMs.</p>
-          <a id="logLabLink" class="lab-link" href="lab/" data-i18n="logLabLink">See these techniques running live in the AI Lab →</a>
-
-          <div class="now-feats">
-            <div class="feat"><h4 data-i18n="zf1h">Multi-LLM orchestration</h4><p data-i18n="zf1p">Designed a unified AI layer over three LLM providers (Gemini, OpenAI and DeepSeek) for document understanding, quiz generation and real-time math tutoring, with request throttling and error handling to keep availability high and token spend under control.</p></div>
-            <div class="feat"><h4 data-i18n="zf2h">Asynchronous backend</h4><p data-i18n="zf2p">FastAPI, Celery and Redis keep long-running tasks (text extraction, LLM calls) off the request path, with retries, timeouts and exponential backoff.</p></div>
-            <div class="feat"><h4 data-i18n="zf3h">Real-time streaming</h4><p data-i18n="zf3p">LLM responses streamed to iOS, Android and web over native WebSockets, with message recovery (Redis Pub/Sub) and automatic reconnection, so users don't lose an answer when the connection drops.</p></div>
-            <div class="feat"><h4 data-i18n="zf4h">Document pipeline</h4><p data-i18n="zf4p">User-uploaded documents processed from cloud object storage with concurrent workers and idempotent operations that prevent duplicated work.</p></div>
-            <div class="feat"><h4 data-i18n="zf5h">Cross-platform delivery</h4><p data-i18n="zf5p">A single Expo (React Native) codebase for three platforms (web, iOS and Android), with authentication and credit-pack payments through two channels: Stripe on web, native in-app purchases on mobile.</p></div>
-            <div class="feat"><h4 data-i18n="zf6h">End-to-end ownership</h4><p data-i18n="zf6p">Architecture, implementation, deployment and operation on Oracle Cloud (Load Balancer, Object Storage).</p></div>
-          </div>
-
-          <div class="pills">
-            <span class="pill">FastAPI</span><span class="pill">Celery</span><span class="pill">Redis</span>
-            <span class="pill">WebSockets</span><span class="pill">Gemini</span><span class="pill">OpenAI</span>
-            <span class="pill">DeepSeek</span><span class="pill">OCI (LB, Object Storage)</span><span class="pill">MongoDB</span>
-            <span class="pill">React Native (Expo)</span><span class="pill">Supabase</span><span class="pill">Stripe</span>
-            <span class="pill">GA4</span><span class="pill">In-app purchases</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="log-entry">
-        <div class="log-date">04/2016 — 08/2024</div>
-        <div>
-          <div class="log-company">Capita PLC <span class="loc">(UK)</span></div>
-          <div class="log-role" data-i18n="capitaRole">Front End Developer</div>
-          <span class="callout" data-i18n="capitaCallout">↳ resolved a system failure affecting thousands of German users</span>
-          <ul>
-            <li data-i18n="capita1">Migrated a Web Dynpro Java application from legacy systems to SAP Fiori applications.</li>
-            <li data-i18n="capita2">Built new user interfaces following SAP Fiori design guidelines (list reports, object pages, flexible-column layouts) and defined OData models with one-way and two-way binding.</li>
-            <li data-i18n="capita3">Deployed Fiori applications from SAP Web IDE / BAS to SAP Launchpad.</li>
-            <li data-i18n="capita4">Identified the root cause (a misconfiguration during a systems migration) of a failure affecting thousands of German users, and resolved it.</li>
-            <li data-i18n="capita5">Improved the user experience of legacy systems by fixing bugs and optimising legacy code.</li>
+<main id="top">
+  <!-- PORTADA -->
+  <section class="cover">
+    <div class="container">
+      <div class="row g-4 g-lg-5 align-items-center">
+        <div class="col-lg-7">
+          <h1>Luis Inga Rivera</h1>
+          <p class="subtitle" data-i18n="heroEyebrow">AI Engineer · Full-Stack Developer</p>
+          <p class="lead" data-i18n="heroRole">15+ years building and operating production software. Lately: AI products, end to end.</p>
+          <ul class="chips">
+            <li class="chip key"><i class="bi bi-patch-check-fill"></i><span data-i18n="factRight">UK Settled Status — no sponsorship needed</span></li>
+            <li class="chip key"><i class="bi bi-lightning-charge-fill"></i><span data-i18n="factAvail">Available immediately</span></li>
+            <li class="chip"><i class="bi bi-geo-alt"></i><span data-i18n="factLoc">Madrid · London</span></li>
+            <li class="chip"><i class="bi bi-translate"></i><span data-i18n="factLang">English (Professional) · Spanish (Native)</span></li>
           </ul>
-          <div class="pills">
-            <span class="pill">UI5</span><span class="pill">OData v2</span><span class="pill">CDS views</span>
-            <span class="pill">S/4HANA</span><span class="pill">Java</span><span class="pill">JSP</span>
-            <span class="pill">jQuery</span><span class="pill">TypeScript</span><span class="pill">XML</span>
-            <span class="pill">Dojo</span><span class="pill">Git</span>
+          <p class="recent" data-i18n="heroStatus">most recent: <b>Zinga Education</b> — FastAPI · Celery · Redis · real-time WebSockets · Gemini / OpenAI / DeepSeek</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-amber" href="mailto:lair60@yahoo.es" data-i18n="ctaEmail">Email me →</a>
+            <!--
+              CV DOWNLOAD FILE: "Luis_Inga_Rivera_CV.pdf" (EN) / "Luis_Inga_Rivera_CV_ES.pdf" (ES), relative paths in the ROOT of the repo.
+            -->
+            <a id="cvLink" data-cv class="btn btn-ghost-light" href="Luis_Inga_Rivera_CV.pdf" target="_blank" download data-i18n="ctaCV">Download CV ↓</a>
+            <a class="btn btn-ghost-light" href="#log" data-i18n="ctaLog">Experience ↓</a>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="featured-card" aria-label="AI Engineering Lab">
+            <div class="kicker"><span data-i18n="wFeatured">Featured project</span><span class="badge-live"><i class="bi bi-broadcast me-1"></i><span data-i18n="wLabBadge">Live demo</span></span></div>
+            <h2>AI Engineering Lab</h2>
+            <div class="chat" aria-hidden="true">
+              <div class="q">Which AI models does he orchestrate?</div>
+              <div class="a">Gemini, OpenAI and DeepSeek, routed by a unified backend with token throttling. <span class="cite">1</span><span class="cite">2</span></div>
+            </div>
+            <div class="score" aria-hidden="true"><span>c-05</span><span class="bar"><i style="width:92%"></i></span><span>0.92</span></div>
+            <div class="score mt-1" aria-hidden="true"><span>c-02</span><span class="bar"><i style="width:64%"></i></span><span>0.64</span></div>
+            <div class="score mt-1 mb-3" aria-hidden="true"><span>c-03</span><span class="bar"><i style="width:41%"></i></span><span>0.41</span></div>
+            <a class="btn btn-amber w-100" href="lab/" data-i18n="ctaLab">Try the AI Lab →</a>
           </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="log-entry">
-        <div class="log-date">11/2015 — 03/2016</div>
-        <div>
-          <div class="log-company">ParkwayLogic <span class="loc" data-i18n="ukContract">(UK) · Contract</span></div>
-          <div class="log-role" data-i18n="parkwayRole">Full Stack Developer</div>
-          <ul><li data-i18n="parkway1">Front-end and back-end development of a trading system.</li></ul>
-          <div class="pills">
-            <span class="pill">AngularJS</span><span class="pill">jQuery</span><span class="pill">PHP</span><span class="pill">MySQL</span>
-            <span class="pill">AWS</span><span class="pill">Bootstrap</span><span class="pill">Linux</span>
+  <!-- CONTENIDO + BARRA LATERAL -->
+  <div class="content" id="content">
+    <div class="container">
+      <div class="row g-4 g-lg-5">
+        <div class="col-lg-8">
+          <div class="stack">
+
+            <section id="about" class="wp-card">
+              <h2 class="sec-title" data-i18n="secAbout">About</h2>
+              <p class="prose mb-0" data-i18n="aboutText">AI Engineer and full-stack developer with 15+ years of experience building and operating production software. Recent focus: LLM-powered products, including multi-model orchestration (Gemini, OpenAI, DeepSeek), real-time streaming, document understanding and retrieval-augmented generation, delivered end to end from architecture to cloud deployment. AWS Certified Generative AI Developer – Professional and AWS Certified DevOps Engineer – Professional. Earlier career in enterprise and front-end development (SAP Fiori, Java, JavaScript) in the UK and Spain.</p>
+            </section>
+
+            <section id="lab" class="wp-card">
+              <h2 class="sec-title"><span data-i18n="secLab">AI Engineering Lab</span><span class="sub" data-i18n="labSub">live demo · RAG</span></h2>
+              <p class="prose" data-i18n="labLead">Don't take my word for it: a working retrieval-augmented system you can test. Ask about my experience or upload your own document. It uses hybrid retrieval and a self-hosted model, and Technical mode shows what happens under the hood.</p>
+              <ul class="list-unstyled mb-4">
+                <li class="mb-1"><i class="bi bi-1-circle me-2" style="color:var(--accent)"></i><span data-i18n="labS1">Explore my experience — no upload needed</span></li>
+                <li class="mb-1"><i class="bi bi-2-circle me-2" style="color:var(--accent)"></i><span data-i18n="labS2">Or upload a PDF, e.g. a job description</span></li>
+                <li><i class="bi bi-3-circle me-2" style="color:var(--accent)"></i><span data-i18n="labS3">Switch to Technical mode to see chunks, scores and prompts</span></li>
+              </ul>
+              <div class="d-flex flex-wrap gap-2">
+                <a id="labCta" class="btn btn-amber" href="lab/" data-i18n="labCta">Open the Lab →</a>
+                <a id="labCtaTech" class="btn btn-outline-accent" href="lab/?mode=technical" data-i18n="labCtaTech">See the internals ↗</a>
+              </div>
+            </section>
+
+            <section id="log" class="stack">
+              <h2 class="sec-title mb-0" data-i18n="secLog">Experience</h2>
+
+              <article class="wp-card post featured">
+                <h3 class="post-title" data-i18n="zingaRole">Full Stack Developer (AI Engineering)</h3>
+                <div class="post-meta"><span><i class="bi bi-building"></i>Zinga Education S.L.</span><span><i class="bi bi-calendar3"></i>03/2025 — 09/2026</span></div>
+                <p class="post-desc" data-i18n="zingaDesc">AI-powered learning platform for web, iOS and Android: document understanding, quiz generation and real-time tutoring with multiple LLMs.</p>
+                <a id="logLabLink" class="lab-link" href="lab/" data-i18n="logLabLink">See these techniques running live in the AI Lab →</a>
+                <div class="row g-3 mt-1">
+                  <div class="col-md-6"><div class="block"><i class="bi bi-cpu"></i><div><h4 data-i18n="zf1h">Multi-LLM orchestration</h4><p data-i18n="zf1p">Designed a unified AI layer over three LLM providers (Gemini, OpenAI and DeepSeek) for document understanding, quiz generation and real-time math tutoring, with request throttling and error handling to keep availability high and token spend under control.</p></div></div></div>
+                  <div class="col-md-6"><div class="block"><i class="bi bi-gear-wide-connected"></i><div><h4 data-i18n="zf2h">Asynchronous backend</h4><p data-i18n="zf2p">FastAPI, Celery and Redis keep long-running tasks (text extraction, LLM calls) off the request path, with retries, timeouts and exponential backoff.</p></div></div></div>
+                  <div class="col-md-6"><div class="block"><i class="bi bi-broadcast"></i><div><h4 data-i18n="zf3h">Real-time streaming</h4><p data-i18n="zf3p">LLM responses streamed to iOS, Android and web over native WebSockets, with message recovery (Redis Pub/Sub) and automatic reconnection, so users don't lose an answer when the connection drops.</p></div></div></div>
+                  <div class="col-md-6"><div class="block"><i class="bi bi-file-earmark-text"></i><div><h4 data-i18n="zf4h">Document pipeline</h4><p data-i18n="zf4p">User-uploaded documents processed from cloud object storage with concurrent workers and idempotent operations that prevent duplicated work.</p></div></div></div>
+                  <div class="col-md-6"><div class="block"><i class="bi bi-phone"></i><div><h4 data-i18n="zf5h">Cross-platform delivery</h4><p data-i18n="zf5p">A single Expo (React Native) codebase for three platforms (web, iOS and Android), with authentication and credit-pack payments through two channels: Stripe on web, native in-app purchases on mobile.</p></div></div></div>
+                  <div class="col-md-6"><div class="block"><i class="bi bi-cloud-check"></i><div><h4 data-i18n="zf6h">End-to-end ownership</h4><p data-i18n="zf6p">Architecture, implementation, deployment and operation on Oracle Cloud (Load Balancer, Object Storage).</p></div></div></div>
+                </div>
+                <div class="tags">
+                  <span class="tag model">Gemini</span><span class="tag model">OpenAI</span><span class="tag model">DeepSeek</span>
+                  <span class="tag">FastAPI</span><span class="tag">Celery</span><span class="tag">Redis</span><span class="tag">WebSockets</span>
+                  <span class="tag">OCI (LB, Object Storage)</span><span class="tag">MongoDB</span><span class="tag">React Native (Expo)</span>
+                  <span class="tag">Supabase</span><span class="tag">Stripe</span><span class="tag">GA4</span><span class="tag">In-app purchases</span>
+                </div>
+              </article>
+
+              <article class="wp-card post">
+                <h3 class="post-title" data-i18n="capitaRole">Front End Developer</h3>
+                <div class="post-meta"><span><i class="bi bi-building"></i>Capita PLC (UK)</span><span><i class="bi bi-calendar3"></i>04/2016 — 08/2024</span></div>
+                <span class="notice"><i class="bi bi-check-circle-fill"></i><span data-i18n="capitaNotice">Resolved a system failure affecting thousands of German users</span></span>
+                <ul class="bul">
+                  <li data-i18n="capita1">Migrated a Web Dynpro Java application from legacy systems to SAP Fiori applications.</li>
+                  <li data-i18n="capita2">Built new user interfaces following SAP Fiori design guidelines (list reports, object pages, flexible-column layouts) and defined OData models with one-way and two-way binding.</li>
+                  <li data-i18n="capita3">Deployed Fiori applications from SAP Web IDE / BAS to SAP Launchpad.</li>
+                  <li data-i18n="capita4">Identified the root cause (a misconfiguration during a systems migration) of a failure affecting thousands of German users, and resolved it.</li>
+                  <li data-i18n="capita5">Improved the user experience of legacy systems by fixing bugs and optimising legacy code.</li>
+                </ul>
+                <div class="tags">
+                  <span class="tag">UI5</span><span class="tag">OData v2</span><span class="tag">CDS views</span><span class="tag">S/4HANA</span><span class="tag">Java</span><span class="tag">JSP</span>
+                  <span class="tag">jQuery</span><span class="tag">TypeScript</span><span class="tag">XML</span><span class="tag">Dojo</span><span class="tag">Git</span>
+                </div>
+              </article>
+
+              <article class="wp-card post">
+                <h3 class="post-title" data-i18n="parkwayRole">Full Stack Developer</h3>
+                <div class="post-meta"><span><i class="bi bi-building"></i>ParkwayLogic <span data-i18n="ukContract">(UK) · Contract</span></span><span><i class="bi bi-calendar3"></i>11/2015 — 03/2016</span></div>
+                <ul class="bul"><li data-i18n="parkway1">Front-end and back-end development of a trading system.</li></ul>
+                <div class="tags"><span class="tag">AngularJS</span><span class="tag">jQuery</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">AWS</span><span class="tag">Bootstrap</span><span class="tag">Linux</span></div>
+              </article>
+
+              <div class="accordion" id="earlierAcc">
+                <div class="accordion-item">
+                  <h3 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#earlier" aria-expanded="false" aria-controls="earlier"><span data-i18n="earlierSummary">Show 6 earlier roles (2007 — 2015)</span></button></h3>
+                  <div id="earlier" class="accordion-collapse collapse" data-bs-parent="#earlierAcc">
+                    <div class="accordion-body">
+                      <div class="earlier-item"><span class="when">07/2015 — 09/2015</span><span class="who">Brokd (UK) · <span data-i18n="contractWord">Contract</span></span><p data-i18n="brokd">Full Stack Developer — built dashboard pages and an Android app. AngularJS, jQuery, Jasmine, Java, Guice, JUnit, Android Studio.</p></div>
+                      <div class="earlier-item"><span class="when">04/2015 — 06/2015</span><span class="who">SuperAwesome (UK)</span><p data-i18n="superawesome">Front End Developer — responsive web pages for advertising companies. JavaScript, jQuery, Ajax, JSON, HTML, CSS, Bootstrap, Git.</p></div>
+                      <div class="earlier-item"><span class="when">03/2014 — 01/2015</span><span class="who">Lytespark (UK)</span><p data-i18n="lytespark">Front End Developer — video conferencing built on WebRTC: Chrome extension for screen sharing, REST API support and cross-browser compatibility. JavaScript, Node.js, MongoDB, REST, Git.</p></div>
+                      <div class="earlier-item"><span class="when">10/2013 — 01/2014</span><span class="who">Alten (Spain)</span><p data-i18n="alten">Analyst — Gas Natural project: coordinated functional and development teams on a web application migration; requirements validation and SQL data checks. Java, SQL, Redmine, SharePoint, Subversion.</p></div>
+                      <div class="earlier-item"><span class="when">10/2010 — 08/2012</span><span class="who">Everis (Spain)</span><p data-i18n="everis">Analyst / Back-end Developer — AXA (car insurance): interface analysis and testing software for a new policy management system; MAUI-Telefónica: functional design and validation of a standardised portal. Java EE, Python, UML, SQL, Jira.</p></div>
+                      <div class="earlier-item"><span class="when">10/2007 — 07/2010</span><span class="who">Dynasty Technology Group (Spain)</span><p data-i18n="dynasty">Analyst / Developer — banking device software (pinpads, ATMs, check readers, printers) following the JXFS standard on Linux and Windows. Java, C++, JUnit, JNI, Linux.</p></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="stack" class="wp-card">
+              <h2 class="sec-title"><span data-i18n="secStack">Skills</span><span class="sub" data-i18n="secStackSub">grouped as in my CV</span></h2>
+              <div class="row g-4">
+                <div class="col-md-6 skill-group"><h3><i class="bi bi-stars"></i><span data-i18n="layerAI">AI / LLM</span></h3>
+                  <span class="tag model">Gemini</span><span class="tag model">OpenAI</span><span class="tag model">DeepSeek</span><span class="tag">LLM orchestration</span><span class="tag">RAG</span><span class="tag">Hybrid search</span><span class="tag">Embeddings</span><span class="tag">pgvector</span><span class="tag">Ollama / Qwen (self-hosted)</span><span class="tag">Response streaming</span><span class="tag">Evaluation</span></div>
+                <div class="col-md-6 skill-group"><h3><i class="bi bi-hdd-stack"></i><span data-i18n="layerBackend">Backend &amp; data</span></h3>
+                  <span class="tag">Python (FastAPI)</span><span class="tag">Celery</span><span class="tag">Redis</span><span class="tag">WebSockets</span><span class="tag">REST APIs</span><span class="tag">PostgreSQL</span><span class="tag">MongoDB</span><span class="tag">Supabase</span><span class="tag">MySQL</span><span class="tag">Java</span><span class="tag">Node.js</span><span class="tag">Stripe</span></div>
+                <div class="col-md-6 skill-group"><h3><i class="bi bi-cloud"></i><span data-i18n="layerCloud">Cloud &amp; DevOps</span></h3>
+                  <span class="tag">AWS</span><span class="tag">Oracle Cloud (OCI)</span><span class="tag">Docker</span><span class="tag">Linux</span><span class="tag">Git</span></div>
+                <div class="col-md-6 skill-group"><h3><i class="bi bi-window-stack"></i><span data-i18n="layerClient">Front-end &amp; mobile</span></h3>
+                  <span class="tag">React Native (Expo)</span><span class="tag">TypeScript</span><span class="tag">JavaScript</span><span class="tag">SAP UI5 / Fiori</span><span class="tag">OData / CDS</span><span class="tag">AngularJS</span><span class="tag">HTML / CSS</span></div>
+                <div class="col-12 skill-group"><h3><i class="bi bi-code-slash"></i><span data-i18n="layerLang">Programming languages</span></h3>
+                  <span class="tag">Python</span><span class="tag">Java</span><span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">C++</span><span class="tag">PHP</span><span class="tag">SQL</span></div>
+              </div>
+            </section>
+
           </div>
         </div>
-      </div>
 
-      <details class="earlier">
-        <summary data-i18n="earlierSummary">Show 5 earlier roles (2007 — 2015)</summary>
+        <aside class="col-lg-4" aria-label="Sidebar">
+          <div class="widget">
+            <h2 class="widget-title" data-i18n="wGlance">At a glance</h2>
+            <ul>
+              <li class="ok"><i class="bi bi-patch-check-fill"></i><span data-i18n="factRight">UK Settled Status — no sponsorship needed</span></li>
+              <li class="ok"><i class="bi bi-lightning-charge-fill"></i><span data-i18n="factAvail">Available immediately</span></li>
+              <li><i class="bi bi-geo-alt-fill"></i><span data-i18n="factLoc">Madrid · London</span></li>
+              <li><i class="bi bi-translate"></i><span data-i18n="factLang">English (Professional) · Spanish (Native)</span></li>
+            </ul>
+          </div>
 
-        <div class="earlier-entry">
-          <span class="log-date">04/2015 — 06/2015</span><span class="log-company">SuperAwesome (UK)</span>
-          <p data-i18n="superawesome">Front End Developer — responsive web pages for advertising companies. JavaScript, jQuery, Ajax, JSON, HTML, CSS, Bootstrap, Git.</p>
-        </div>
-        <div class="earlier-entry">
-          <span class="log-date">03/2014 — 01/2015</span><span class="log-company">Lytespark (UK)</span>
-          <p data-i18n="lytespark">Front End Developer — video conferencing built on WebRTC: Chrome extension for screen sharing, REST API support and cross-browser compatibility. JavaScript, Node.js, MongoDB, REST, Git.</p>
-        </div>
-        <div class="earlier-entry">
-          <span class="log-date">10/2013 — 01/2014</span><span class="log-company">Alten (Spain)</span>
-          <p data-i18n="alten">Analyst — Gas Natural project: coordinated functional and development teams on a web application migration; requirements validation and SQL data checks. Java, SQL, Redmine, SharePoint, Subversion.</p>
-        </div>
-        <div class="earlier-entry">
-          <span class="log-date">10/2010 — 08/2012</span><span class="log-company">Everis (Spain)</span>
-          <p data-i18n="everis">Analyst / Back-end Developer — AXA (car insurance): interface analysis and testing software for a new policy management system; MAUI-Telefónica: functional design and validation of a standardised portal. Java EE, Python, UML, SQL, Jira.</p>
-        </div>
-        <div class="earlier-entry">
-          <span class="log-date">10/2007 — 07/2010</span><span class="log-company">Dynasty Technology Group (Spain)</span>
-          <p data-i18n="dynasty">Analyst / Developer — banking device software (pinpads, ATMs, check readers, printers) following the JXFS standard on Linux and Windows. Java, C++, JUnit, JNI, Linux.</p>
-        </div>
-      </details>
-    </div>
-  </section>
+          <div class="widget">
+            <h2 class="widget-title" data-i18n="wCerts">Certifications</h2>
+            <ul>
+              <li><i class="bi bi-award-fill"></i><div><a id="aws-cert" href="https://www.credly.com/badges/d8664b36-a297-4a6e-8498-c9305f1edd34/public_url" target="_blank" rel="noopener">AWS Certified Generative AI Developer – Professional ↗</a><small data-i18n="cert5meta">10/2026 · Madrid, Spain</small></div></li>
+              <li><i class="bi bi-award-fill"></i><div><a id="aws-devops-cert" href="https://www.credly.com/badges/99d3da1d-e689-47a3-910a-e7c012f893b4/public_url" target="_blank" rel="noopener">AWS Certified DevOps Engineer – Professional ↗</a><small data-i18n="cert1meta">07/2020 · London, UK</small></div></li>
+              <li><i class="bi bi-award-fill"></i><div><a id="sap-cert" href="https://www.credly.com/badges/86ca751f-447b-47a3-ba32-7d83e74e1f15" target="_blank" rel="noopener">SAP Certified Development Associate — Fiori ↗</a><small data-i18n="cert2meta">03/2018 · London, UK</small></div></li>
+            </ul>
+          </div>
 
-  <!-- STACK -->
-  <section id="stack" class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">03</span>
-      <h2 class="sec-title" data-i18n="secStack">Skills</h2>
-      <span class="sec-sub" data-i18n="secStackSub">grouped as in my CV</span>
-    </div>
+          <div class="widget">
+            <h2 class="widget-title" data-i18n="wEdu">Education</h2>
+            <ul>
+              <li><i class="bi bi-mortarboard-fill"></i><div><strong data-i18n="cert3name">MSc, Information Technology</strong><small data-i18n="cert3meta">Complutense University of Madrid · 2008–2013</small></div></li>
+              <li><i class="bi bi-mortarboard"></i><div><strong data-i18n="cert4name">BSc, Computer Science</strong><small data-i18n="cert4meta">Complutense University of Madrid · 2004–2007</small></div></li>
+            </ul>
+          </div>
 
-    <div class="stack-layers reveal">
-      <div class="layer">
-        <div class="layer-name" data-i18n="layerAI">AI / LLM</div>
-        <div class="layer-items">
-          <span class="pill model">Gemini</span><span class="pill model">OpenAI</span><span class="pill model">DeepSeek</span>
-          <span class="pill">LLM orchestration</span><span class="pill">RAG</span><span class="pill">Hybrid search</span>
-          <span class="pill">Embeddings</span><span class="pill">pgvector</span><span class="pill">Ollama / Qwen (self-hosted)</span>
-          <span class="pill">Response streaming</span><span class="pill">Evaluation</span>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="layer-name" data-i18n="layerBackend">Backend &amp; data</div>
-        <div class="layer-items">
-          <span class="pill">Python (FastAPI)</span><span class="pill">Celery</span><span class="pill">Redis</span>
-          <span class="pill">WebSockets</span><span class="pill">REST APIs</span><span class="pill">PostgreSQL</span>
-          <span class="pill">MongoDB</span><span class="pill">Supabase</span><span class="pill">MySQL</span>
-          <span class="pill">Java</span><span class="pill">Node.js</span><span class="pill">Stripe</span>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="layer-name" data-i18n="layerCloud">Cloud &amp; DevOps</div>
-        <div class="layer-items">
-          <span class="pill">AWS</span><span class="pill">Oracle Cloud (OCI)</span><span class="pill">Docker</span>
-          <span class="pill">Linux</span><span class="pill">Git</span>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="layer-name" data-i18n="layerClient">Front-end &amp; mobile</div>
-        <div class="layer-items">
-          <span class="pill">React Native (Expo)</span><span class="pill">TypeScript</span><span class="pill">JavaScript</span>
-          <span class="pill">SAP UI5 / Fiori</span><span class="pill">OData / CDS</span><span class="pill">AngularJS</span><span class="pill">HTML / CSS</span>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="layer-name" data-i18n="layerLang">Programming languages</div>
-        <div class="layer-items">
-          <span class="pill">Python</span><span class="pill">Java</span><span class="pill">JavaScript</span>
-          <span class="pill">TypeScript</span><span class="pill">C++</span><span class="pill">PHP</span><span class="pill">SQL</span>
-        </div>
+          <div class="sticky-widgets">
+          <div class="widget">
+            <h2 class="widget-title" data-i18n="wResume">Résumé</h2>
+            <p class="small text-secondary" data-i18n="wResumeText">Two pages, available in English and Spanish.</p>
+            <a data-cv class="btn btn-amber w-100" href="Luis_Inga_Rivera_CV.pdf" target="_blank" download><i class="bi bi-download me-2"></i><span data-i18n="ctaCV">Download CV ↓</span></a>
+          </div>
+
+          <div class="widget">
+            <h2 class="widget-title" data-i18n="wContact">Contact</h2>
+            <ul>
+              <li><i class="bi bi-envelope-fill"></i><a href="mailto:lair60@yahoo.es">lair60@yahoo.es</a></li>
+              <li><i class="bi bi-telephone-fill"></i><a href="tel:+447821232546">🇬🇧 +44 7821 232546</a></li>
+              <li><i class="bi bi-telephone-fill"></i><a href="tel:+34637229134">🇪🇸 +34 637 229 134</a></li>
+              <li><i class="bi bi-linkedin"></i><a id="linkedin-link" href="https://www.linkedin.com/in/lair60" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+              <li><i class="bi bi-github"></i><a id="github-link" href="https://github.com/lair60" target="_blank" rel="noopener">GitHub ↗</a></li>
+            </ul>
+          </div>
+          </div>
+        </aside>
       </div>
     </div>
-
-    <div class="certs">
-      <div class="cert">
-        <div class="cname"><div class="foot-links"><a id="aws-cert" href="https://www.credly.com/badges/d8664b36-a297-4a6e-8498-c9305f1edd34/public_url" target="_blank" rel="noopener">AWS Certified Generative AI Developer – Professional ↗</a></div></div>
-        <div class="cmeta" data-i18n="cert5meta">10/2026 · Madrid, Spain</div>
-      </div>
-      <div class="cert">
-        <div class="cname"><div class="foot-links"><a id="aws-devops-cert" href="https://www.credly.com/badges/99d3da1d-e689-47a3-910a-e7c012f893b4/public_url" target="_blank" rel="noopener">AWS Certified DevOps Engineer – Professional ↗</a></div></div>
-        <div class="cmeta" data-i18n="cert1meta">07/2020 · London, UK</div>
-      </div>
-      <div class="cert">
-        <div class="cname"><div class="foot-links"><a id="sap-cert" href="https://www.credly.com/badges/86ca751f-447b-47a3-ba32-7d83e74e1f15" target="_blank" rel="noopener">SAP Certified Development Associate — Fiori ↗</a></div></div>
-        <div class="cmeta" data-i18n="cert2meta">03/2018 · London, UK</div>
-      </div>
-      <div class="cert">
-        <div class="cname" data-i18n="cert3name">MSc, Information Technology</div>
-        <div class="cmeta" data-i18n="cert3meta">Complutense University of Madrid · 2008–2013</div>
-      </div>
-      <div class="cert">
-        <div class="cname" data-i18n="cert4name">BSc, Computer Science</div>
-        <div class="cmeta" data-i18n="cert4meta">Complutense University of Madrid · 2004–2007</div>
-      </div>
-      <div class="cert">
-        <div class="cname" data-i18n="cert6name">Languages</div>
-        <div class="cmeta" data-i18n="cert6meta">English (Professional) · Spanish (Native)</div>
-      </div>
-    </div>
-  </section>
+  </div>
 </main>
 
-<footer id="contact" class="wrap">
-  <div class="sec-head">
-    <span class="sec-num">04</span>
-    <h2 class="sec-title" data-i18n="secContact">Contact</h2>
-  </div>
-  <div class="foot-grid">
-    <div>
-      <div class="foot-title" data-i18n="footTitle">Open to AI engineering and full-stack roles.</div>
-      <p class="foot-desc" data-i18n="footDesc">Working from Madrid or London. UK Settled Status — no sponsorship needed — and available immediately. Happy to talk contract or permanent.</p>
+<footer id="contact" class="site-footer">
+  <div class="container">
+    <div class="row g-4 g-lg-5">
+      <div class="col-lg-6">
+        <div class="foot-lead" data-i18n="footTitle">Open to AI engineering and full-stack roles.</div>
+        <p data-i18n="footDesc">Working from Madrid or London. UK Settled Status — no sponsorship needed — and available immediately. Happy to talk contract or permanent.</p>
+        <a class="btn btn-amber mt-1" href="mailto:lair60@yahoo.es" data-i18n="navEmail">Email me</a>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h3 data-i18n="wExplore">Explore</h3>
+        <ul class="cap">
+          <li><a href="#about" data-i18n="navAbout">about</a></li>
+          <li><a href="lab/" data-i18n="navLab">lab</a></li>
+          <li><a href="#log" data-i18n="navLog">experience</a></li>
+          <li><a href="#stack" data-i18n="navStack">skills</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h3 data-i18n="wContact">Contact</h3>
+        <ul>
+          <li><a href="mailto:lair60@yahoo.es">lair60@yahoo.es</a></li>
+          <li><a href="tel:+447821232546">+44 7821 232546</a></li>
+          <li><a href="tel:+34637229134">+34 637 229 134</a></li>
+          <li><a href="https://www.linkedin.com/in/lair60" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li><a href="https://github.com/lair60" target="_blank" rel="noopener">GitHub ↗</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="foot-links">
-      <a href="mailto:lair60@yahoo.es">lair60@yahoo.es</a>
-      <a href="tel:+447821232546">🇬🇧 +44 7821 232546</a>
-      <a href="tel:+34637229134">🇪🇸 +34 637 229 134</a>
-      <a id="linkedin-link" href="https://www.linkedin.com/in/lair60" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a id="github-link" href="https://github.com/lair60" target="_blank" rel="noopener">GitHub ↗</a>
-      <!--<a id="website-link" href="https://www.test-me.app" target="_blank" rel="noopener">test-me.app ↗</a>-->
-    </div>
-  </div>
-  <div class="copyright">
-    <span data-i18n="footBuilt">Luis Inga Rivera</span>
-    <span id="year"></span>
+    <div class="copy"><span data-i18n="footBuilt">Luis Inga Rivera</span><span id="year"></span></div>
   </div>
 </footer>
 
+<!-- Enlaces del producto (ocultos, conservados de la versión anterior):
+<a href="https://www.test-me.app" target="_blank" rel="noopener">Website</a>
+<a href="https://play.google.com/store/apps/details?id=com.testme.zingaeducation" target="_blank" rel="noopener">Google Play</a>
+<a href="https://apps.apple.com/es/app/test-me-app-estudia-con-ia/id6761847855" target="_blank" rel="noopener">App Store</a>
+-->
+
+<button type="button" class="to-top" id="toTop" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   document.getElementById('year').textContent = '© ' + new Date().getFullYear();
 
-  // scroll reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, {threshold:0.12});
-    revealEls.forEach(el=>io.observe(el));
-  } else {
-    revealEls.forEach(el=>el.classList.add('in'));
-  }
+  // sombra de la cabecera y botón "volver arriba"
+  const header = document.querySelector('.site-header'), toTop = document.getElementById('toTop');
+  const onScroll = () => { header.classList.toggle('scrolled', window.scrollY > 8); toTop.classList.toggle('show', window.scrollY > 500); };
+  window.addEventListener('scroll', onScroll, {passive: true}); onScroll();
+  toTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}));
+  // el menú móvil se cierra al elegir una opción
+  document.querySelectorAll('#mainNav .nav-link').forEach(a => a.addEventListener('click', () => {
+    const c = document.getElementById('mainNav'); if (c.classList.contains('show') && window.bootstrap) bootstrap.Collapse.getOrCreateInstance(c).hide(); }));
 
   // ---------- i18n (EN / ES) ----------
-  const i18n = {
-    en: {
-      "pageTitle": "Luis Inga Rivera — AI Engineer & Full-Stack Developer",
-      "navLab": "lab",
-      "ctaLab": "Try the AI Lab →",
-      "secLab": "AI Engineering Lab",
-      "labSub": "live demo · RAG",
-      "labLead": "Don't take my word for it: a working retrieval-augmented system you can test. Ask about my experience or upload your own document. It uses hybrid retrieval and a self-hosted model, and Technical mode shows what happens under the hood.",
-      "labS1": "Explore my experience — no upload needed",
-      "labS2": "Or upload a PDF, e.g. a job description",
-      "labS3": "Switch to Technical mode to see chunks, scores and prompts",
-      "labCta": "Open the Lab →",
-      "labCtaTech": "See the internals ↗",
-      "logLabLink": "See these techniques running live in the AI Lab →",
-      "navAvail": "available for new roles",
-      "navNow": "now",
-      "navLog": "experience",
-      "navStack": "skills",
-      "navContact": "contact",
-      "navEmail": "Email me",
-      "heroEyebrow": "AI Engineer · Full-Stack Developer",
-      "heroRole": "15+ years building and operating production software. Lately: AI products, end to end.",
-      "heroDesc": "I design LLM-powered systems — multi-model orchestration, real-time streaming, document understanding and retrieval-augmented generation — and take them from architecture to cloud deployment. AWS Certified Generative AI Developer and DevOps Engineer (Professional).",
-      "factRight": "UK Settled Status — no sponsorship needed",
-      "factAvail": "Available immediately",
-      "factLoc": "Madrid · London",
-      "factLang": "English (Professional) · Spanish (Native)",
-      "heroStatus": "most recent: <b>Zinga Education</b> — FastAPI · Celery · Redis · real-time WebSockets · Gemini / OpenAI / DeepSeek",
-      "ctaEmail": "Email me →",
-      "ctaCV": "Download CV ↓",
-      "ctaLog": "Experience ↓",
-      "diagLabel": "Zinga Education — request pipeline",
-      "diagLive": "● live",
-      "diagClientSub": "iOS · Android · Web",
-      "diagWsSub": "real-time stream",
-      "diagRedisSub": "broker · pub/sub",
-      "diagAiSub": "document AI · tutoring",
-      "diagStorage": "Storage",
-      "secLog": "Experience",
-      "zingaRole": "Full Stack Developer (AI Engineering)",
-      "zingaDesc": "AI-powered learning platform for web, iOS and Android: document understanding, quiz generation and real-time tutoring with multiple LLMs.",
-      "zf1h": "Multi-LLM orchestration",
-      "zf1p": "Designed a unified AI layer over three LLM providers (Gemini, OpenAI and DeepSeek) for document understanding, quiz generation and real-time math tutoring, with request throttling and error handling to keep availability high and token spend under control.",
-      "zf2h": "Asynchronous backend",
-      "zf2p": "FastAPI, Celery and Redis keep long-running tasks (text extraction, LLM calls) off the request path, with retries, timeouts and exponential backoff.",
-      "zf3h": "Real-time streaming",
-      "zf3p": "LLM responses streamed to iOS, Android and web over native WebSockets, with message recovery (Redis Pub/Sub) and automatic reconnection, so users don't lose an answer when the connection drops.",
-      "zf4h": "Document pipeline",
-      "zf4p": "User-uploaded documents processed from cloud object storage with concurrent workers and idempotent operations that prevent duplicated work.",
-      "zf5h": "Cross-platform delivery",
-      "zf5p": "A single Expo (React Native) codebase for three platforms (web, iOS and Android), with authentication and credit-pack payments through two channels: Stripe on web, native in-app purchases on mobile.",
-      "zf6h": "End-to-end ownership",
-      "zf6p": "Architecture, implementation, deployment and operation on Oracle Cloud (Load Balancer, Object Storage).",
-      "capitaRole": "Front End Developer",
-      "capitaCallout": "↳ resolved a system failure affecting thousands of German users",
-      "capita1": "Migrated a Web Dynpro Java application from legacy systems to SAP Fiori applications.",
-      "capita2": "Built new user interfaces following SAP Fiori design guidelines (list reports, object pages, flexible-column layouts) and defined OData models with one-way and two-way binding.",
-      "capita3": "Deployed Fiori applications from SAP Web IDE / BAS to SAP Launchpad.",
-      "capita4": "Identified the root cause (a misconfiguration during a systems migration) of a failure affecting thousands of German users, and resolved it.",
-      "capita5": "Improved the user experience of legacy systems by fixing bugs and optimising legacy code.",
-      "ukContract": "(UK) · Contract",
-      "contractWord": "Contract",
-      "parkwayRole": "Full Stack Developer",
-      "parkway1": "Front-end and back-end development of a trading system.",
-      "earlierSummary": "Show 5 earlier roles (2007 — 2015)",
-      "brokd": "Full Stack Developer — built dashboard pages and an Android app. AngularJS, jQuery, Jasmine, Java, Guice, JUnit, Android Studio.",
-      "superawesome": "Front End Developer — responsive web pages for advertising companies. JavaScript, jQuery, Ajax, JSON, HTML, CSS, Bootstrap, Git.",
-      "lytespark": "Front End Developer — video conferencing built on WebRTC: Chrome extension for screen sharing, REST API support and cross-browser compatibility. JavaScript, Node.js, MongoDB, REST, Git.",
-      "alten": "Analyst — Gas Natural project: coordinated functional and development teams on a web application migration; requirements validation and SQL data checks. Java, SQL, Redmine, SharePoint, Subversion.",
-      "everis": "Analyst / Back-end Developer — AXA (car insurance): interface analysis and testing software for a new policy management system; MAUI-Telefónica: functional design and validation of a standardised portal. Java EE, Python, UML, SQL, Jira.",
-      "dynasty": "Analyst / Developer — banking device software (pinpads, ATMs, check readers, printers) following the JXFS standard on Linux and Windows. Java, C++, JUnit, JNI, Linux.",
-      "secStack": "Skills",
-      "secStackSub": "grouped as in my CV",
-      "layerAI": "AI / LLM",
-      "layerBackend": "Backend & data",
-      "layerCloud": "Cloud & DevOps",
-      "layerClient": "Front-end & mobile",
-      "layerLang": "Programming languages",
-      "cert1meta": "07/2020 · London, UK",
-      "cert2meta": "03/2018 · London, UK",
-      "cert5meta": "10/2026 · Madrid, Spain",
-      "cert3name": "MSc, Information Technology",
-      "cert3meta": "Complutense University of Madrid · 2008–2013",
-      "cert4name": "BSc, Computer Science",
-      "cert4meta": "Complutense University of Madrid · 2004–2007",
-      "cert6name": "Languages",
-      "cert6meta": "English (Professional) · Spanish (Native)",
-      "secContact": "Contact",
-      "footTitle": "Open to AI engineering and full-stack roles.",
-      "footDesc": "Working from Madrid or London. UK Settled Status — no sponsorship needed — and available immediately. Happy to talk contract or permanent.",
-      "footBuilt": "Luis Inga Rivera",
-      "nowTitle": "Full Stack Developer — AI Learning Assistant",
-      "nowLinkWeb": "Website ↗",
-      "nowDesc": "Designed and built the product's backend and cross-platform client from scratch: an async pipeline that turns uploaded documents into quizzes and real-time tutoring, streamed live to iOS, Android and web from a single codebase.",
-      "secNow": "Now",
-      "secNowSub": "03/2025 — present",
-      "feat1h": "Async backend",
-      "feat1p": "FastAPI + Celery, with Redis as broker and backend, processing long-running text extraction and AI calls off the request path — retries, timeouts, exponential backoff.",
-      "feat2h": "Real-time streaming",
-      "feat2p": "Native WebSockets stream AI response chunks live, with Redis Pub/Sub message recovery and automatic reconnection — consistent behaviour across iOS, Android and web.",
-      "feat3h": "Multi-AI orchestration",
-      "feat3p": "Unified backend routing across Gemini, OpenAI and DeepSeek for document understanding, quiz generation and real-time math tutoring, with throttling for cost-efficient token use.",
-      "feat4h": "Cross-platform + payments",
-      "feat4p": "Single Expo codebase for web, iOS and Android, with authentication and a full payment system across Stripe (web) and native IAP (mobile)."
-    },
-    es: {
-      "pageTitle": "Luis Inga Rivera — AI Engineer y Desarrollador Full-Stack",
-      "navLab": "lab",
-      "ctaLab": "Prueba el AI Lab →",
-      "secLab": "AI Engineering Lab",
-      "labSub": "demo en vivo · RAG",
-      "labLead": "No hace falta que me creas: un sistema de recuperación aumentada (RAG) que puedes probar. Pregunta sobre mi experiencia o sube tu propio documento. Usa recuperación híbrida y un modelo autoalojado, y el modo Technical muestra qué ocurre por dentro.",
-      "labS1": "Explora mi experiencia — sin subir nada",
-      "labS2": "O sube un PDF, p. ej. una oferta de trabajo",
-      "labS3": "Cambia a modo Technical para ver chunks, scores y prompts",
-      "labCta": "Abrir el Lab →",
-      "labCtaTech": "Ver el interior ↗",
-      "logLabLink": "Mira estas técnicas funcionando en vivo en el AI Lab →",
-      "navAvail": "disponible para nuevas oportunidades",
-      "navNow": "ahora",
-      "navLog": "experiencia",
-      "navStack": "competencias",
-      "navContact": "contacto",
-      "navEmail": "Escríbeme",
-      "heroEyebrow": "AI Engineer · Desarrollador Full-Stack",
-      "heroRole": "Más de 15 años creando y operando software en producción. Últimamente, productos de IA de principio a fin.",
-      "heroDesc": "Diseño sistemas basados en LLM — orquestación multimodelo, streaming en tiempo real, comprensión de documentos y generación aumentada por recuperación (RAG) — y los llevo de la arquitectura al despliegue en la nube. AWS Certified Generative AI Developer y DevOps Engineer (Professional).",
-      "factRight": "Settled Status en Reino Unido — sin necesidad de patrocinio",
-      "factAvail": "Disponibilidad inmediata",
-      "factLoc": "Madrid · Londres",
-      "factLang": "Inglés (Profesional) · Español (Nativo)",
-      "heroStatus": "más reciente: <b>Zinga Education</b> — FastAPI · Celery · Redis · WebSockets en tiempo real · Gemini / OpenAI / DeepSeek",
-      "ctaEmail": "Escríbeme →",
-      "ctaCV": "Descargar CV ↓",
-      "ctaLog": "Experiencia ↓",
-      "diagLabel": "Zinga Education — pipeline de peticiones",
-      "diagLive": "● en vivo",
-      "diagClientSub": "iOS · Android · Web",
-      "diagWsSub": "stream en tiempo real",
-      "diagRedisSub": "broker · pub/sub",
-      "diagAiSub": "IA documental · tutorías",
-      "diagStorage": "Almacenamiento",
-      "secLog": "Experiencia",
-      "zingaRole": "Full Stack Developer (AI Engineering)",
-      "zingaDesc": "Plataforma de aprendizaje con IA para web, iOS y Android: comprensión de documentos, generación de cuestionarios y tutoría en tiempo real con varios LLM.",
-      "zf1h": "Orquestación multi-LLM",
-      "zf1p": "Diseñé una capa de IA unificada sobre tres proveedores de LLM (Gemini, OpenAI y DeepSeek) para comprensión de documentos, generación de cuestionarios y tutoría de matemáticas en tiempo real, con limitación de peticiones y gestión de errores para mantener una alta disponibilidad y controlar el gasto en tokens.",
-      "zf2h": "Backend asíncrono",
-      "zf2p": "FastAPI, Celery y Redis mantienen las tareas largas (extracción de texto, llamadas a LLM) fuera del ciclo de petición, con reintentos, timeouts y backoff exponencial.",
-      "zf3h": "Streaming en tiempo real",
-      "zf3p": "Las respuestas de los LLM llegan a iOS, Android y web mediante WebSockets nativos, con recuperación de mensajes (Redis Pub/Sub) y reconexión automática, de modo que el usuario no pierde una respuesta si se corta la conexión.",
-      "zf4h": "Pipeline de documentos",
-      "zf4p": "Documentos subidos por los usuarios procesados desde almacenamiento de objetos en la nube, con workers concurrentes y operaciones idempotentes que evitan trabajo duplicado.",
-      "zf5h": "Entrega multiplataforma",
-      "zf5p": "Una única base de código Expo (React Native) para tres plataformas (web, iOS y Android), con autenticación y pagos de paquetes de créditos por dos canales: Stripe en web y compras integradas nativas en móvil.",
-      "zf6h": "Responsabilidad de extremo a extremo",
-      "zf6p": "Arquitectura, implementación, despliegue y operación en Oracle Cloud (Load Balancer, Object Storage).",
-      "capitaRole": "Front End Developer",
-      "capitaCallout": "↳ resolví un fallo que afectaba a miles de usuarios en Alemania",
-      "capita1": "Migré una aplicación Java Web Dynpro desde sistemas heredados a aplicaciones SAP Fiori.",
-      "capita2": "Construí nuevas interfaces siguiendo las guías de diseño de SAP Fiori (list reports, object pages, flexible-column layouts) y definí modelos OData con binding unidireccional y bidireccional.",
-      "capita3": "Desplegué aplicaciones Fiori desde SAP Web IDE / BAS en SAP Launchpad.",
-      "capita4": "Identifiqué la causa raíz (una mala configuración durante una migración de sistemas) de un fallo que afectaba a miles de usuarios en Alemania, y lo resolví.",
-      "capita5": "Mejoré la experiencia de usuario de sistemas heredados corrigiendo errores y optimizando código legacy.",
-      "ukContract": "(Reino Unido) · Contrato",
-      "contractWord": "Contrato",
-      "parkwayRole": "Full Stack Developer",
-      "parkway1": "Desarrollo front-end y back-end de un sistema de trading.",
-      "earlierSummary": "Ver 5 puestos anteriores (2007 — 2015)",
-      "brokd": "Full Stack Developer — páginas de dashboard y una app Android. AngularJS, jQuery, Jasmine, Java, Guice, JUnit, Android Studio.",
-      "superawesome": "Front End Developer — páginas web responsive para empresas de publicidad. JavaScript, jQuery, Ajax, JSON, HTML, CSS, Bootstrap, Git.",
-      "lytespark": "Front End Developer — videoconferencia con WebRTC: extensión de Chrome para compartir pantalla, soporte de la API REST y compatibilidad entre navegadores. JavaScript, Node.js, MongoDB, REST, Git.",
-      "alten": "Analista — proyecto Gas Natural: coordinación de equipos funcionales y de desarrollo en la migración de una aplicación web; validación de requisitos y comprobaciones de datos con SQL. Java, SQL, Redmine, SharePoint, Subversion.",
-      "everis": "Analista / Back-end Developer — AXA (seguros de coche): análisis de interfaces y software de pruebas para un nuevo sistema de gestión de pólizas; MAUI-Telefónica: diseño funcional y validación de un portal estandarizado. Java EE, Python, UML, SQL, Jira.",
-      "dynasty": "Analista / Developer — software para dispositivos bancarios (pinpads, cajeros, lectores de cheques, impresoras) según el estándar JXFS en Linux y Windows. Java, C++, JUnit, JNI, Linux.",
-      "secStack": "Competencias",
-      "secStackSub": "agrupadas como en mi CV",
-      "layerAI": "IA / LLM",
-      "layerBackend": "Backend y datos",
-      "layerCloud": "Cloud y DevOps",
-      "layerClient": "Front-end y móvil",
-      "layerLang": "Lenguajes de programación",
-      "cert1meta": "07/2020 · Londres, Reino Unido",
-      "cert2meta": "03/2018 · Londres, Reino Unido",
-      "cert5meta": "10/2026 · Madrid, España",
-      "cert3name": "Máster en Ingeniería Informática",
-      "cert3meta": "Universidad Complutense de Madrid · 2008–2013",
-      "cert4name": "Grado en Ingeniería Informática",
-      "cert4meta": "Universidad Complutense de Madrid · 2004–2007",
-      "cert6name": "Idiomas",
-      "cert6meta": "Inglés (Profesional) · Español (Nativo)",
-      "secContact": "Contacto",
-      "footTitle": "Abierto a roles de ingeniería de IA y full-stack.",
-      "footDesc": "Trabajo desde Madrid o Londres. Settled Status en Reino Unido, sin necesidad de patrocinio, y disponibilidad inmediata. Encantado de hablar de contrato o de puesto fijo.",
-      "footBuilt": "Luis Inga Rivera",
-      "nowTitle": "Desarrollador Full Stack — Asistente de Estudio con IA",
-      "nowLinkWeb": "Web ↗",
-      "nowDesc": "Diseñé y construí el backend y el cliente multiplataforma del producto desde cero: un pipeline asíncrono que convierte documentos subidos en cuestionarios y tutorías en tiempo real, con streaming a iOS, Android y web desde una única base de código.",
-      "secNow": "Ahora",
-      "secNowSub": "03/2025 — presente",
-      "feat1h": "Backend asíncrono",
-      "feat1p": "FastAPI + Celery, con Redis como broker y backend, procesando extracción de texto y llamadas a IA fuera del ciclo de petición — reintentos, timeouts, backoff exponencial.",
-      "feat2h": "Streaming en tiempo real",
-      "feat2p": "WebSockets nativos que envían la respuesta de la IA en fragmentos en vivo, con recuperación de mensajes vía Redis Pub/Sub y reconexión automática — comportamiento consistente en iOS, Android y web.",
-      "feat3h": "Orquestación multi-IA",
-      "feat3p": "Backend unificado que enruta entre Gemini, OpenAI y DeepSeek para comprensión de documentos, generación de cuestionarios y tutorías de matemáticas en tiempo real, con control de uso para optimizar costes.",
-      "feat4h": "Multiplataforma + pagos",
-      "feat4p": "Una única base de código en Expo para web, iOS y Android, con autenticación y un sistema de pagos completo vía Stripe (web) e IAP nativo (móvil)."
-    }
-  };
+  const i18n = {en: {"pageTitle": "Luis Inga Rivera — AI Engineer & Full-Stack Developer", "navLab": "lab", "ctaLab": "Try the AI Lab →", "secLab": "AI Engineering Lab", "labSub": "live demo · RAG", "labLead": "Don't take my word for it: a working retrieval-augmented system you can test. Ask about my experience or upload your own document. It uses hybrid retrieval and a self-hosted model, and Technical mode shows what happens under the hood.", "labS1": "Explore my experience — no upload needed", "labS2": "Or upload a PDF, e.g. a job description", "labS3": "Switch to Technical mode to see chunks, scores and prompts", "labCta": "Open the Lab →", "labCtaTech": "See the internals ↗", "logLabLink": "See these techniques running live in the AI Lab →", "navAvail": "available for new roles", "navNow": "now", "navLog": "experience", "navStack": "skills", "navContact": "contact", "navEmail": "Email me", "heroEyebrow": "AI Engineer · Full-Stack Developer", "heroRole": "15+ years building and operating production software. Lately: AI products, end to end.", "heroDesc": "I design LLM-powered systems — multi-model orchestration, real-time streaming, document understanding and retrieval-augmented generation — and take them from architecture to cloud deployment. AWS Certified Generative AI Developer and DevOps Engineer (Professional).", "factRight": "UK Settled Status — no sponsorship needed", "factAvail": "Available immediately", "factLoc": "Madrid · London", "factLang": "English (Professional) · Spanish (Native)", "heroStatus": "most recent: <b>Zinga Education</b> — FastAPI · Celery · Redis · real-time WebSockets · Gemini / OpenAI / DeepSeek", "ctaEmail": "Email me →", "ctaCV": "Download CV ↓", "ctaLog": "Experience ↓", "diagLabel": "Zinga Education — request pipeline", "diagLive": "● live", "diagClientSub": "iOS · Android · Web", "diagWsSub": "real-time stream", "diagRedisSub": "broker · pub/sub", "diagAiSub": "document AI · tutoring", "diagStorage": "Storage", "secLog": "Experience", "zingaRole": "Full Stack Developer (AI Engineering)", "zingaDesc": "AI-powered learning platform for web, iOS and Android: document understanding, quiz generation and real-time tutoring with multiple LLMs.", "zf1h": "Multi-LLM orchestration", "zf1p": "Designed a unified AI layer over three LLM providers (Gemini, OpenAI and DeepSeek) for document understanding, quiz generation and real-time math tutoring, with request throttling and error handling to keep availability high and token spend under control.", "zf2h": "Asynchronous backend", "zf2p": "FastAPI, Celery and Redis keep long-running tasks (text extraction, LLM calls) off the request path, with retries, timeouts and exponential backoff.", "zf3h": "Real-time streaming", "zf3p": "LLM responses streamed to iOS, Android and web over native WebSockets, with message recovery (Redis Pub/Sub) and automatic reconnection, so users don't lose an answer when the connection drops.", "zf4h": "Document pipeline", "zf4p": "User-uploaded documents processed from cloud object storage with concurrent workers and idempotent operations that prevent duplicated work.", "zf5h": "Cross-platform delivery", "zf5p": "A single Expo (React Native) codebase for three platforms (web, iOS and Android), with authentication and credit-pack payments through two channels: Stripe on web, native in-app purchases on mobile.", "zf6h": "End-to-end ownership", "zf6p": "Architecture, implementation, deployment and operation on Oracle Cloud (Load Balancer, Object Storage).", "capitaRole": "Front End Developer", "capitaCallout": "↳ resolved a system failure affecting thousands of German users", "capita1": "Migrated a Web Dynpro Java application from legacy systems to SAP Fiori applications.", "capita2": "Built new user interfaces following SAP Fiori design guidelines (list reports, object pages, flexible-column layouts) and defined OData models with one-way and two-way binding.", "capita3": "Deployed Fiori applications from SAP Web IDE / BAS to SAP Launchpad.", "capita4": "Identified the root cause (a misconfiguration during a systems migration) of a failure affecting thousands of German users, and resolved it.", "capita5": "Improved the user experience of legacy systems by fixing bugs and optimising legacy code.", "ukContract": "(UK) · Contract", "contractWord": "Contract", "parkwayRole": "Full Stack Developer", "parkway1": "Front-end and back-end development of a trading system.", "earlierSummary": "Show 6 earlier roles (2007 — 2015)", "brokd": "Full Stack Developer — built dashboard pages and an Android app. AngularJS, jQuery, Jasmine, Java, Guice, JUnit, Android Studio.", "superawesome": "Front End Developer — responsive web pages for advertising companies. JavaScript, jQuery, Ajax, JSON, HTML, CSS, Bootstrap, Git.", "lytespark": "Front End Developer — video conferencing built on WebRTC: Chrome extension for screen sharing, REST API support and cross-browser compatibility. JavaScript, Node.js, MongoDB, REST, Git.", "alten": "Analyst — Gas Natural project: coordinated functional and development teams on a web application migration; requirements validation and SQL data checks. Java, SQL, Redmine, SharePoint, Subversion.", "everis": "Analyst / Back-end Developer — AXA (car insurance): interface analysis and testing software for a new policy management system; MAUI-Telefónica: functional design and validation of a standardised portal. Java EE, Python, UML, SQL, Jira.", "dynasty": "Analyst / Developer — banking device software (pinpads, ATMs, check readers, printers) following the JXFS standard on Linux and Windows. Java, C++, JUnit, JNI, Linux.", "secStack": "Skills", "secStackSub": "grouped as in my CV", "layerAI": "AI / LLM", "layerBackend": "Backend & data", "layerCloud": "Cloud & DevOps", "layerClient": "Front-end & mobile", "layerLang": "Programming languages", "cert1meta": "07/2020 · London, UK", "cert2meta": "03/2018 · London, UK", "cert5meta": "10/2026 · Madrid, Spain", "cert3name": "MSc, Information Technology", "cert3meta": "Complutense University of Madrid · 2008–2013", "cert4name": "BSc, Computer Science", "cert4meta": "Complutense University of Madrid · 2004–2007", "cert6name": "Languages", "cert6meta": "English (Professional) · Spanish (Native)", "secContact": "Contact", "footTitle": "Open to AI engineering and full-stack roles.", "footDesc": "Working from Madrid or London. UK Settled Status — no sponsorship needed — and available immediately. Happy to talk contract or permanent.", "footBuilt": "Luis Inga Rivera", "nowTitle": "Full Stack Developer — AI Learning Assistant", "nowLinkWeb": "Website ↗", "nowDesc": "Designed and built the product's backend and cross-platform client from scratch: an async pipeline that turns uploaded documents into quizzes and real-time tutoring, streamed live to iOS, Android and web from a single codebase.", "secNow": "Now", "secNowSub": "03/2025 — present", "feat1h": "Async backend", "feat1p": "FastAPI + Celery, with Redis as broker and backend, processing long-running text extraction and AI calls off the request path — retries, timeouts, exponential backoff.", "feat2h": "Real-time streaming", "feat2p": "Native WebSockets stream AI response chunks live, with Redis Pub/Sub message recovery and automatic reconnection — consistent behaviour across iOS, Android and web.", "feat3h": "Multi-AI orchestration", "feat3p": "Unified backend routing across Gemini, OpenAI and DeepSeek for document understanding, quiz generation and real-time math tutoring, with throttling for cost-efficient token use.", "feat4h": "Cross-platform + payments", "feat4p": "Single Expo codebase for web, iOS and Android, with authentication and a full payment system across Stripe (web) and native IAP (mobile).", "navAbout": "about", "secAbout": "About", "aboutText": "AI Engineer and full-stack developer with 15+ years of experience building and operating production software. Recent focus: LLM-powered products, including multi-model orchestration (Gemini, OpenAI, DeepSeek), real-time streaming, document understanding and retrieval-augmented generation, delivered end to end from architecture to cloud deployment. AWS Certified Generative AI Developer – Professional and AWS Certified DevOps Engineer – Professional. Earlier career in enterprise and front-end development (SAP Fiori, Java, JavaScript) in the UK and Spain.", "wFeatured": "Featured project", "wGlance": "At a glance", "wCerts": "Certifications", "wEdu": "Education", "wContact": "Contact", "wResume": "Résumé", "wResumeText": "Two pages, available in English and Spanish.", "wExplore": "Explore", "wLabBadge": "Live demo", "secSkills": "Skills", "wPeriod": "Period", "capitaNotice": "Resolved a system failure affecting thousands of German users"}, es: {"pageTitle": "Luis Inga Rivera — AI Engineer y Desarrollador Full-Stack", "navLab": "lab", "ctaLab": "Prueba el AI Lab →", "secLab": "AI Engineering Lab", "labSub": "demo en vivo · RAG", "labLead": "No hace falta que me creas: un sistema de recuperación aumentada (RAG) que puedes probar. Pregunta sobre mi experiencia o sube tu propio documento. Usa recuperación híbrida y un modelo autoalojado, y el modo Technical muestra qué ocurre por dentro.", "labS1": "Explora mi experiencia — sin subir nada", "labS2": "O sube un PDF, p. ej. una oferta de trabajo", "labS3": "Cambia a modo Technical para ver chunks, scores y prompts", "labCta": "Abrir el Lab →", "labCtaTech": "Ver el interior ↗", "logLabLink": "Mira estas técnicas funcionando en vivo en el AI Lab →", "navAvail": "disponible para nuevas oportunidades", "navNow": "ahora", "navLog": "experiencia", "navStack": "competencias", "navContact": "contacto", "navEmail": "Escríbeme", "heroEyebrow": "AI Engineer · Desarrollador Full-Stack", "heroRole": "Más de 15 años creando y operando software en producción. Últimamente, productos de IA de principio a fin.", "heroDesc": "Diseño sistemas basados en LLM — orquestación multimodelo, streaming en tiempo real, comprensión de documentos y generación aumentada por recuperación (RAG) — y los llevo de la arquitectura al despliegue en la nube. AWS Certified Generative AI Developer y DevOps Engineer (Professional).", "factRight": "Settled Status en Reino Unido — sin necesidad de patrocinio", "factAvail": "Disponibilidad inmediata", "factLoc": "Madrid · Londres", "factLang": "Inglés (Profesional) · Español (Nativo)", "heroStatus": "más reciente: <b>Zinga Education</b> — FastAPI · Celery · Redis · WebSockets en tiempo real · Gemini / OpenAI / DeepSeek", "ctaEmail": "Escríbeme →", "ctaCV": "Descargar CV ↓", "ctaLog": "Experiencia ↓", "diagLabel": "Zinga Education — pipeline de peticiones", "diagLive": "● en vivo", "diagClientSub": "iOS · Android · Web", "diagWsSub": "stream en tiempo real", "diagRedisSub": "broker · pub/sub", "diagAiSub": "IA documental · tutorías", "diagStorage": "Almacenamiento", "secLog": "Experiencia", "zingaRole": "Full Stack Developer (AI Engineering)", "zingaDesc": "Plataforma de aprendizaje con IA para web, iOS y Android: comprensión de documentos, generación de cuestionarios y tutoría en tiempo real con varios LLM.", "zf1h": "Orquestación multi-LLM", "zf1p": "Diseñé una capa de IA unificada sobre tres proveedores de LLM (Gemini, OpenAI y DeepSeek) para comprensión de documentos, generación de cuestionarios y tutoría de matemáticas en tiempo real, con limitación de peticiones y gestión de errores para mantener una alta disponibilidad y controlar el gasto en tokens.", "zf2h": "Backend asíncrono", "zf2p": "FastAPI, Celery y Redis mantienen las tareas largas (extracción de texto, llamadas a LLM) fuera del ciclo de petición, con reintentos, timeouts y backoff exponencial.", "zf3h": "Streaming en tiempo real", "zf3p": "Las respuestas de los LLM llegan a iOS, Android y web mediante WebSockets nativos, con recuperación de mensajes (Redis Pub/Sub) y reconexión automática, de modo que el usuario no pierde una respuesta si se corta la conexión.", "zf4h": "Pipeline de documentos", "zf4p": "Documentos subidos por los usuarios procesados desde almacenamiento de objetos en la nube, con workers concurrentes y operaciones idempotentes que evitan trabajo duplicado.", "zf5h": "Entrega multiplataforma", "zf5p": "Una única base de código Expo (React Native) para tres plataformas (web, iOS y Android), con autenticación y pagos de paquetes de créditos por dos canales: Stripe en web y compras integradas nativas en móvil.", "zf6h": "Responsabilidad de extremo a extremo", "zf6p": "Arquitectura, implementación, despliegue y operación en Oracle Cloud (Load Balancer, Object Storage).", "capitaRole": "Front End Developer", "capitaCallout": "↳ resolví un fallo que afectaba a miles de usuarios en Alemania", "capita1": "Migré una aplicación Java Web Dynpro desde sistemas heredados a aplicaciones SAP Fiori.", "capita2": "Construí nuevas interfaces siguiendo las guías de diseño de SAP Fiori (list reports, object pages, flexible-column layouts) y definí modelos OData con binding unidireccional y bidireccional.", "capita3": "Desplegué aplicaciones Fiori desde SAP Web IDE / BAS en SAP Launchpad.", "capita4": "Identifiqué la causa raíz (una mala configuración durante una migración de sistemas) de un fallo que afectaba a miles de usuarios en Alemania, y lo resolví.", "capita5": "Mejoré la experiencia de usuario de sistemas heredados corrigiendo errores y optimizando código legacy.", "ukContract": "(Reino Unido) · Contrato", "contractWord": "Contrato", "parkwayRole": "Full Stack Developer", "parkway1": "Desarrollo front-end y back-end de un sistema de trading.", "earlierSummary": "Ver 6 puestos anteriores (2007 — 2015)", "brokd": "Full Stack Developer — páginas de dashboard y una app Android. AngularJS, jQuery, Jasmine, Java, Guice, JUnit, Android Studio.", "superawesome": "Front End Developer — páginas web responsive para empresas de publicidad. JavaScript, jQuery, Ajax, JSON, HTML, CSS, Bootstrap, Git.", "lytespark": "Front End Developer — videoconferencia con WebRTC: extensión de Chrome para compartir pantalla, soporte de la API REST y compatibilidad entre navegadores. JavaScript, Node.js, MongoDB, REST, Git.", "alten": "Analista — proyecto Gas Natural: coordinación de equipos funcionales y de desarrollo en la migración de una aplicación web; validación de requisitos y comprobaciones de datos con SQL. Java, SQL, Redmine, SharePoint, Subversion.", "everis": "Analista / Back-end Developer — AXA (seguros de coche): análisis de interfaces y software de pruebas para un nuevo sistema de gestión de pólizas; MAUI-Telefónica: diseño funcional y validación de un portal estandarizado. Java EE, Python, UML, SQL, Jira.", "dynasty": "Analista / Developer — software para dispositivos bancarios (pinpads, cajeros, lectores de cheques, impresoras) según el estándar JXFS en Linux y Windows. Java, C++, JUnit, JNI, Linux.", "secStack": "Competencias", "secStackSub": "agrupadas como en mi CV", "layerAI": "IA / LLM", "layerBackend": "Backend y datos", "layerCloud": "Cloud y DevOps", "layerClient": "Front-end y móvil", "layerLang": "Lenguajes de programación", "cert1meta": "07/2020 · Londres, Reino Unido", "cert2meta": "03/2018 · Londres, Reino Unido", "cert5meta": "10/2026 · Madrid, España", "cert3name": "Máster en Ingeniería Informática", "cert3meta": "Universidad Complutense de Madrid · 2008–2013", "cert4name": "Grado en Ingeniería Informática", "cert4meta": "Universidad Complutense de Madrid · 2004–2007", "cert6name": "Idiomas", "cert6meta": "Inglés (Profesional) · Español (Nativo)", "secContact": "Contacto", "footTitle": "Abierto a roles de ingeniería de IA y full-stack.", "footDesc": "Trabajo desde Madrid o Londres. Settled Status en Reino Unido, sin necesidad de patrocinio, y disponibilidad inmediata. Encantado de hablar de contrato o de puesto fijo.", "footBuilt": "Luis Inga Rivera", "nowTitle": "Desarrollador Full Stack — Asistente de Estudio con IA", "nowLinkWeb": "Web ↗", "nowDesc": "Diseñé y construí el backend y el cliente multiplataforma del producto desde cero: un pipeline asíncrono que convierte documentos subidos en cuestionarios y tutorías en tiempo real, con streaming a iOS, Android y web desde una única base de código.", "secNow": "Ahora", "secNowSub": "03/2025 — presente", "feat1h": "Backend asíncrono", "feat1p": "FastAPI + Celery, con Redis como broker y backend, procesando extracción de texto y llamadas a IA fuera del ciclo de petición — reintentos, timeouts, backoff exponencial.", "feat2h": "Streaming en tiempo real", "feat2p": "WebSockets nativos que envían la respuesta de la IA en fragmentos en vivo, con recuperación de mensajes vía Redis Pub/Sub y reconexión automática — comportamiento consistente en iOS, Android y web.", "feat3h": "Orquestación multi-IA", "feat3p": "Backend unificado que enruta entre Gemini, OpenAI y DeepSeek para comprensión de documentos, generación de cuestionarios y tutorías de matemáticas en tiempo real, con control de uso para optimizar costes.", "feat4h": "Multiplataforma + pagos", "feat4p": "Una única base de código en Expo para web, iOS y Android, con autenticación y un sistema de pagos completo vía Stripe (web) e IAP nativo (móvil).", "navAbout": "sobre mí", "secAbout": "Sobre mí", "aboutText": "AI Engineer y desarrollador full-stack con más de 15 años de experiencia creando y operando software en producción. Enfoque reciente: productos basados en LLM, con orquestación multimodelo (Gemini, OpenAI, DeepSeek), streaming en tiempo real, comprensión de documentos y generación aumentada por recuperación (RAG), entregados de extremo a extremo, desde la arquitectura hasta el despliegue en la nube. AWS Certified Generative AI Developer – Professional y AWS Certified DevOps Engineer – Professional. Trayectoria previa en desarrollo empresarial y front-end (SAP Fiori, Java, JavaScript) en Reino Unido y España.", "wFeatured": "Proyecto destacado", "wGlance": "De un vistazo", "wCerts": "Certificaciones", "wEdu": "Formación", "wContact": "Contacto", "wResume": "Currículum", "wResumeText": "Dos páginas, disponible en inglés y español.", "wExplore": "Explorar", "wLabBadge": "Demo en vivo", "secSkills": "Competencias", "wPeriod": "Periodo", "capitaNotice": "Resolví un fallo que afectaba a miles de usuarios en Alemania"}};
 
-  function trackEvent(name, params = {}) {
-  if (typeof gtag === 'function') {
-    console.log("evento: ", name)
-    gtag('event', name, params);
-  }
-}
-
+  function trackEvent(name, params = {}) { if (typeof gtag === 'function') { gtag('event', name, params); } }
 
   function applyLang(lang){
     const dict = i18n[lang] || i18n.en;
-    const cvLink = document.getElementById("cvLink");
-
-    if (lang === "es") {
-      cvLink.href = "Luis_Inga_Rivera_CV_ES.pdf";
-    } else {
-      cvLink.href = "Luis_Inga_Rivera_CV.pdf";
-    }
-    document.querySelectorAll('[data-i18n]').forEach(el=>{
-      const key = el.getAttribute('data-i18n');
-      if(dict[key] !== undefined){
-        el.innerHTML = dict[key];
-      }
-    });
+    document.querySelectorAll('[data-cv]').forEach(a => { a.href = lang === 'es' ? 'Luis_Inga_Rivera_CV_ES.pdf' : 'Luis_Inga_Rivera_CV.pdf'; });
+    document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (dict[k] !== undefined) el.innerHTML = dict[k]; });
     if (dict.pageTitle) document.title = dict.pageTitle;
     document.documentElement.lang = lang;
-    document.querySelectorAll('.lang-switch button').forEach(b=>{
-      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
-    });
+    document.querySelectorAll('.lang-switch button').forEach(b => b.classList.toggle('active', b.getAttribute('data-lang') === lang));
   }
+  document.querySelectorAll('.lang-switch button').forEach(btn => btn.addEventListener('click', () => {
+    applyLang(btn.getAttribute('data-lang')); trackEvent('lang_click', {lang: document.documentElement.lang}); }));
+  applyLang((navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en');
 
-  document.querySelectorAll('.lang-switch button').forEach(btn=>{
-    btn.addEventListener('click', ()=> {applyLang(btn.getAttribute('data-lang')); trackEvent('lang_click', {
-      lang: document.documentElement.lang
-    })});
-  });
-
-  const browserLang = (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
-  applyLang(browserLang);
-
-
-  // click tracking (optional chaining: elements that are commented out no longer crash the script)
+  // seguimiento de clics (los mismos eventos que la versión anterior)
   const on = (sel, ev, loc) => document.querySelector(sel)?.addEventListener('click', () =>
     trackEvent(ev, {location: loc, language: document.documentElement.lang || 'unknown'}));
-  on('[data-i18n="navLab"]', 'lab_click', 'header');
-  on('[data-i18n="navLog"]', 'log_click', 'header');
-  on('[data-i18n="navStack"]', 'stack_click', 'header');
-  on('[data-i18n="navContact"]', 'contact_click', 'header');
-  on('[data-i18n="ctaLab"]', 'lab_click', 'hero');
-  on('#labCta', 'lab_click', 'teaser');
-  on('#labCtaTech', 'lab_technical_click', 'teaser');
+  on('.navbar [data-i18n="navLab"]', 'lab_click', 'header');
+  on('.navbar [data-i18n="navLog"]', 'log_click', 'header');
+  on('.navbar [data-i18n="navStack"]', 'stack_click', 'header');
+  on('.navbar [data-i18n="navContact"]', 'contact_click', 'header');
+  on('.cover [data-i18n="ctaLab"]', 'lab_click', 'hero');
+  on('#labCta', 'lab_click', 'section');
+  on('#labCtaTech', 'lab_technical_click', 'section');
   on('#logLabLink', 'lab_click', 'log');
   on('#aws-cert', 'aws_cert_click', 'body');
   on('#aws-devops-cert', 'aws_devops_cert_click', 'body');
   on('#sap-cert', 'sap_cert_click', 'body');
-  on('#linkedin-link', 'linkedin_click', 'footer');
-  on('#github-link', 'github_click', 'footer');
-  on('#website-link', 'website_click', 'footer');
-  on('#android-link', 'android_click', 'body');
-  on('#ios-link', 'ios_click', 'body');
-  on('[data-i18n="nowLinkWeb"]', 'website_link_click', 'body');
-  on('[data-i18n="ctaEmail"]', 'email_click', 'body');
-  on('[data-i18n="ctaCV"]', 'cv_click', 'body');
-  on('[data-i18n="ctaLog"]', 'experience_click', 'body');
+  on('#linkedin-link', 'linkedin_click', 'sidebar');
+  on('#github-link', 'github_click', 'sidebar');
+  on('.cover [data-i18n="ctaEmail"]', 'email_click', 'body');
+  on('#cvLink', 'cv_click', 'body');
+  on('.cover [data-i18n="ctaLog"]', 'experience_click', 'body');
   on('.nav-cta', 'email_click', 'header');
 </script>
 </body>
